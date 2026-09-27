@@ -691,11 +691,114 @@ function renderCourseTasks(courseCode) {
   });
 }
 
+// =============================================================================
+// 12.5. Schedule Intelligence: Next Class & Smart Due Dates
+// =============================================================================
+
+function formatShortDate(d) {
+  const weekday = d.toLocaleDateString('en-US', { weekday: 'short' });
+  const month = d.toLocaleDateString('en-US', { month: 'short' });
+  const dayNum = d.getDate();
+  return `${weekday}, ${month} ${dayNum}`;
+}
+
+function calculateNextClass(courseCode, fromDate = new Date()) {
+  const now = new Date(fromDate);
+  const currentHour = now.getHours();
+  const currentMin = now.getMinutes();
+
+  let targetClassesByDay = {};
+  if (courseCode) {
+    for (let d = 1; d <= 5; d++) {
+      const dayData = SCHEDULE_DATA[d];
+      if (dayData && dayData.classes) {
+        const found = dayData.classes.find(c => c.code === courseCode);
+        if (found) targetClassesByDay[d] = found;
+      }
+    }
+  }
+
+  const isGeneral = Object.keys(targetClassesByDay).length === 0;
+
+  for (let offset = 0; offset <= 7; offset++) {
+    const cand = new Date(now);
+    cand.setDate(now.getDate() + offset);
+    const day = cand.getDay();
+
+    if (day >= 1 && day <= 5) {
+      if (isGeneral) {
+        const dayClasses = SCHEDULE_DATA[day]?.classes || [];
+        if (dayClasses.length > 0) {
+          if (offset === 0) {
+            const latestEnd = Math.max(...dayClasses.map(c => c.endHour * 60 + c.endMin));
+            if (currentHour * 60 + currentMin < latestEnd) {
+              return { date: cand, offset, label: formatShortDate(cand) };
+            }
+          } else {
+            return { date: cand, offset, label: formatShortDate(cand) };
+          }
+        }
+      } else {
+        const cls = targetClassesByDay[day];
+        if (cls) {
+          if (offset === 0) {
+            const startTime = cls.startHour * 60 + cls.startMin;
+            if (currentHour * 60 + currentMin < startTime) {
+              return { date: cand, offset, label: formatShortDate(cand) };
+            }
+          } else {
+            return { date: cand, offset, label: formatShortDate(cand) };
+          }
+        }
+      }
+    }
+  }
+
+  const fallback = new Date(now);
+  fallback.setDate(now.getDate() + 7);
+  return { date: fallback, offset: 7, label: formatShortDate(fallback) };
+}
+
+function getResolvedDueDate(option, courseCode = selectedCourseCode) {
+  const now = new Date();
+  if (option === 'Next Class') {
+    const nextInfo = calculateNextClass(courseCode, now);
+    return `${nextInfo.label} (Next Class)`;
+  }
+  if (option === 'Tomorrow') {
+    const tom = new Date(now);
+    tom.setDate(now.getDate() + 1);
+    return `${formatShortDate(tom)} (Tomorrow)`;
+  }
+  if (option === 'This Week') {
+    const fri = new Date(now);
+    const day = fri.getDay();
+    const diff = 5 - day;
+    fri.setDate(fri.getDate() + (diff >= 0 ? diff : diff + 7));
+    return `${formatShortDate(fri)} (This Week)`;
+  }
+  if (option === 'Custom' && sliderCustomDate && sliderCustomDate.value) {
+    const parts = sliderCustomDate.value.split('-');
+    if (parts.length === 3) {
+      const d = new Date(parseInt(parts[0]), parseInt(parts[1]) - 1, parseInt(parts[2]));
+      return formatShortDate(d);
+    }
+    return sliderCustomDate.value;
+  }
+  if (option === 'No Rush') {
+    return 'No Rush';
+  }
+  return option;
+}
+
 // Quick Add Task Form inside Course Page
 courseAddTaskForm.onsubmit = (e) => {
   e.preventDefault();
   const text = courseNewTaskInput.value.trim();
   if (!text || !currentCourse) return;
+
+  const nextInfo = calculateNextClass(currentCourse.code);
+  const dueStr = `${nextInfo.label} (Next Class)`;
 
   const localTasks = getStorage(STORAGE_KEYS.LOCAL_TASKS, []);
   const newTask = {
@@ -703,7 +806,7 @@ courseAddTaskForm.onsubmit = (e) => {
     title: text,
     isLocal: true,
     courseCode: currentCourse.code,
-    dueDate: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
+    dueDate: dueStr
   };
 
   localTasks.unshift(newTask);
@@ -813,16 +916,31 @@ function updateSlide3Summary() {
     summaryCourse.textContent = selectedCourseCode || 'Personal / General';
   }
   if (summaryTask) {
-    const text = sliderTextInput.value.trim() || 'Untitled task';
+    const text = (sliderTextInput && sliderTextInput.value.trim()) || 'Untitled task';
     summaryTask.textContent = text;
     summaryTask.title = text;
   }
+
+  // Dynamically update due button subtexts
+  const nextInfo = calculateNextClass(selectedCourseCode);
+  const subNext = document.getElementById('sub-due-next');
+  if (subNext) subNext.textContent = nextInfo.label;
+
+  const now = new Date();
+  const tom = new Date(now);
+  tom.setDate(now.getDate() + 1);
+  const subTom = document.getElementById('sub-due-tomorrow');
+  if (subTom) subTom.textContent = formatShortDate(tom);
+
+  const fri = new Date(now);
+  const day = fri.getDay();
+  const diff = 5 - day;
+  fri.setDate(fri.getDate() + (diff >= 0 ? diff : diff + 7));
+  const subWeek = document.getElementById('sub-due-week');
+  if (subWeek) subWeek.textContent = formatShortDate(fri);
+
   if (summaryDue) {
-    let due = selectedDueOption;
-    if (selectedDueOption === 'Custom' && sliderCustomDate && sliderCustomDate.value) {
-      due = sliderCustomDate.value;
-    }
-    summaryDue.textContent = due;
+    summaryDue.textContent = getResolvedDueDate(selectedDueOption, selectedCourseCode);
   }
 }
 
@@ -885,10 +1003,7 @@ function saveSliderTask() {
     return;
   }
 
-  let dueStr = selectedDueOption;
-  if (selectedDueOption === 'Custom' && sliderCustomDate && sliderCustomDate.value) {
-    dueStr = sliderCustomDate.value;
-  }
+  const dueStr = getResolvedDueDate(selectedDueOption, selectedCourseCode);
 
   const localTasks = getStorage(STORAGE_KEYS.LOCAL_TASKS, []);
   const newTask = {

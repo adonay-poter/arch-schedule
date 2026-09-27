@@ -325,11 +325,25 @@
               <p class="slide-subtitle">Select quick option or pick date</p>
               
               <div class="slider-due-options" id="slider-due-options">
-                <button type="button" class="slider-due-btn active" data-due="Next Class">Next Class</button>
-                <button type="button" class="slider-due-btn" data-due="Tomorrow">Tomorrow</button>
-                <button type="button" class="slider-due-btn" data-due="This Week">This Week</button>
-                <button type="button" class="slider-due-btn" data-due="No Rush">No Rush</button>
-                <button type="button" class="slider-due-btn full-width" data-due="Custom">Pick Specific Date</button>
+                <button type="button" class="slider-due-btn active" data-due="Next Class" id="slider-btn-next-class">
+                  <span class="due-btn-label">Next Class</span>
+                  <span class="due-btn-sub" id="sub-due-next">Calculating...</span>
+                </button>
+                <button type="button" class="slider-due-btn" data-due="Tomorrow" id="slider-btn-tomorrow">
+                  <span class="due-btn-label">Tomorrow</span>
+                  <span class="due-btn-sub" id="sub-due-tomorrow">...</span>
+                </button>
+                <button type="button" class="slider-due-btn" data-due="This Week" id="slider-btn-this-week">
+                  <span class="due-btn-label">This Week</span>
+                  <span class="due-btn-sub" id="sub-due-week">...</span>
+                </button>
+                <button type="button" class="slider-due-btn" data-due="No Rush" id="slider-btn-no-rush">
+                  <span class="due-btn-label">No Rush</span>
+                  <span class="due-btn-sub">Anytime</span>
+                </button>
+                <button type="button" class="slider-due-btn full-width" data-due="Custom" id="slider-btn-custom">
+                  <span class="due-btn-label">Pick Specific Date</span>
+                </button>
               </div>
 
               <input type="date" id="slider-custom-date" class="task-input hidden" style="margin-top: 8px;">
