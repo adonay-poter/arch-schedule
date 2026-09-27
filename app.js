@@ -113,13 +113,13 @@ const SCHEDULE_DATA = {
 };
 
 const COURSE_OPTIONS = [
-  { code: null, name: 'Personal / General' },
-  { code: 'Arch 2411', name: 'Arch 2411 (Basic Design I)' },
-  { code: 'Arch 2351', name: 'Arch 2351 (Model Making)' },
-  { code: 'Arch 2541', name: 'Arch 2541 (Structures I)' },
-  { code: 'Arch 2311', name: 'Arch 2311 (Comm Skills I)' },
-  { code: 'Arch 2511', name: 'Arch 2511 (Materials I)' },
-  { code: 'Arch 2211', name: 'Arch 2211 (History I)' }
+  { code: null, name: 'Personal / General', subtitle: 'General task or errand' },
+  { code: 'Arch 2411', name: 'Arch 2411', subtitle: 'Basic Design I' },
+  { code: 'Arch 2351', name: 'Arch 2351', subtitle: 'Model Making Workshop' },
+  { code: 'Arch 2541', name: 'Arch 2541', subtitle: 'Theory & Design of Structures I' },
+  { code: 'Arch 2311', name: 'Arch 2311', subtitle: 'Communication Skills I' },
+  { code: 'Arch 2511', name: 'Arch 2511', subtitle: 'Building Materials & Construction I' },
+  { code: 'Arch 2211', name: 'Arch 2211', subtitle: 'History of Architecture I' }
 ];
 
 // =============================================================================
@@ -233,8 +233,9 @@ if (selectedDate.getDay() === 0 || selectedDate.getDay() === 6) {
 }
 
 let currentCourse = null;
-let selectedCourseForTask = null;
-let selectedCourseForNote = 'Arch 2411';
+let sliderMode = 'task'; // 'task' | 'note'
+let currentSliderStep = 0; // 0 (course), 1 (text), 2 (due - tasks only)
+let selectedCourseCode = null; // null for personal/general, or 'Arch 2411'
 let selectedDueOption = 'Next Class';
 
 // =============================================================================
@@ -284,6 +285,7 @@ const courseNotesHint = document.getElementById('course-notes-hint');
 const mainFab = document.getElementById('main-fab');
 const fabMenu = document.getElementById('fab-menu');
 const fabAddTask = document.getElementById('fab-add-task');
+const fabAddNote = document.getElementById('fab-add-note');
 const fabViewTasks = document.getElementById('fab-view-tasks');
 const fabQuote = document.getElementById('fab-quote');
 
@@ -300,22 +302,37 @@ const tasksList = document.getElementById('tasks-list');
 const addTaskForm = document.getElementById('add-task-form');
 const newTaskInput = document.getElementById('new-task-input');
 
-// Quick Add Task / Note Modal
-const quickAddModal = document.getElementById('quick-add-modal');
-const quickAddCloseBtn = document.getElementById('quick-add-close-btn');
-const quickAddModalTag = document.getElementById('quick-add-modal-tag');
-const tabTaskBtn = document.getElementById('tab-task-btn');
-const tabNoteBtn = document.getElementById('tab-note-btn');
-const quickTaskForm = document.getElementById('quick-task-form');
-const quickNoteForm = document.getElementById('quick-note-form');
-const courseSelectorLabel = document.getElementById('course-selector-label');
-const courseChipsContainer = document.getElementById('course-chips-container');
-const noteCourseSelectorLabel = document.getElementById('note-course-selector-label');
-const noteCourseChipsContainer = document.getElementById('note-course-chips-container');
-const quickTaskText = document.getElementById('quick-task-text');
-const dueChipsContainer = document.getElementById('due-chips-container');
-const quickTaskCustomDate = document.getElementById('quick-task-custom-date');
-const quickNoteText = document.getElementById('quick-note-text');
+// Multi-Step Slider Modal (Tasks & Notes)
+const sliderModal = document.getElementById('slider-modal');
+const sliderCloseBtn = document.getElementById('slider-close-btn');
+const sliderModeTag = document.getElementById('slider-mode-tag');
+const sliderStepIndicator = document.getElementById('slider-step-indicator');
+const sliderProgressBar = document.getElementById('slider-progress-bar');
+const sliderTrack = document.getElementById('slider-track');
+
+// Slide 1 (Course)
+const slideCourseTitle = document.getElementById('slide-course-title');
+const slideCourseSubtitle = document.getElementById('slide-course-subtitle');
+const sliderCourseList = document.getElementById('slider-course-list');
+const sliderCancelBtn = document.getElementById('slider-cancel-btn');
+const sliderToStep2 = document.getElementById('slider-to-step2');
+
+// Slide 2 (Text)
+const slideTextTitle = document.getElementById('slide-text-title');
+const slideSelectedCourseLabel = document.getElementById('slide-selected-course-label');
+const sliderTextInput = document.getElementById('slider-text-input');
+const sliderBackTo1 = document.getElementById('slider-back-to-1');
+const sliderToStep3 = document.getElementById('slider-to-step3');
+const sliderSaveNoteBtn = document.getElementById('slider-save-note-btn');
+
+// Slide 3 (Due & Summary)
+const sliderDueOptions = document.getElementById('slider-due-options');
+const sliderCustomDate = document.getElementById('slider-custom-date');
+const summaryCourse = document.getElementById('summary-course');
+const summaryTask = document.getElementById('summary-task');
+const summaryDue = document.getElementById('summary-due');
+const sliderBackTo2 = document.getElementById('slider-back-to-2');
+const sliderSaveTaskBtn = document.getElementById('slider-save-task-btn');
 
 // =============================================================================
 // 7. GitHub Content Sync (content.json)
@@ -697,110 +714,180 @@ courseAddTaskForm.onsubmit = (e) => {
 };
 
 // =============================================================================
-// 13. Mobile-Friendly Course Picker & Quick Add Modal
+// 13. Multi-Step Slider Modal (Tasks & Class Notes)
 // =============================================================================
 
-function renderCourseChips(container, currentSelected, onSelect) {
-  container.innerHTML = '';
-  COURSE_OPTIONS.forEach(opt => {
-    const chip = document.createElement('button');
-    chip.type = 'button';
-    chip.className = `course-chip ${opt.code === currentSelected ? 'selected' : ''}`;
-    chip.textContent = opt.name;
-    chip.onclick = () => {
-      onSelect(opt.code);
-      renderCourseChips(container, opt.code, onSelect);
+function getCourseDisplay(code) {
+  if (!code) return 'Personal / General';
+  const found = COURSE_OPTIONS.find(c => c.code === code);
+  return found ? `${found.code} — ${found.subtitle || found.name}` : code;
+}
+
+function renderSliderCourseList() {
+  if (!sliderCourseList) return;
+  sliderCourseList.innerHTML = '';
+
+  const options = sliderMode === 'note'
+    ? COURSE_OPTIONS.filter(o => o.code !== null)
+    : COURSE_OPTIONS;
+
+  options.forEach(opt => {
+    const card = document.createElement('button');
+    card.type = 'button';
+    const isSelected = (opt.code === selectedCourseCode);
+    card.className = `slider-course-card ${isSelected ? 'selected' : ''}`;
+
+    card.innerHTML = `
+      <div class="course-card-info">
+        <span class="course-card-code">${opt.code || 'Personal / General'}</span>
+        <span class="course-card-name">${opt.subtitle || opt.name}</span>
+      </div>
+      <i class="ph ${isSelected ? 'ph-check-circle' : 'ph-circle'} course-card-icon"></i>
+    `;
+
+    card.onclick = () => {
+      selectedCourseCode = opt.code;
+      renderSliderCourseList();
+      updateSlide2Meta();
+      setTimeout(() => {
+        setSliderStep(1);
+      }, 140);
     };
-    container.appendChild(chip);
+
+    sliderCourseList.appendChild(card);
   });
 }
 
-function openQuickAddModal(targetCourseCode = null, targetTab = 'task') {
-  selectedCourseForTask = targetCourseCode;
-  selectedCourseForNote = targetCourseCode || 'Arch 2411';
-  selectedDueOption = 'Next Class';
+function setSliderStep(step) {
+  currentSliderStep = step;
+  const totalSteps = sliderMode === 'task' ? 3 : 2;
 
-  // Contextual modal headers
-  if (targetCourseCode) {
-    quickAddModalTag.textContent = `ADD FOR ${targetCourseCode}`;
-    courseSelectorLabel.textContent = `COURSE: ${targetCourseCode}`;
-    noteCourseSelectorLabel.textContent = `COURSE: ${targetCourseCode}`;
-  } else {
-    quickAddModalTag.textContent = 'ADD TO SCHEDULE';
-    courseSelectorLabel.textContent = 'WHICH COURSE?';
-    noteCourseSelectorLabel.textContent = 'WHICH COURSE?';
+  // Update progress bar
+  const progressPercent = ((step + 1) / totalSteps) * 100;
+  if (sliderProgressBar) {
+    sliderProgressBar.style.width = `${progressPercent}%`;
   }
 
-  // Render selection chips
-  renderCourseChips(courseChipsContainer, selectedCourseForTask, (code) => {
-    selectedCourseForTask = code;
-  });
-  renderCourseChips(noteCourseChipsContainer, selectedCourseForNote, (code) => {
-    selectedCourseForNote = code;
-  });
+  // Update step indicator
+  if (sliderStepIndicator) {
+    sliderStepIndicator.textContent = `Step ${step + 1} of ${totalSteps}`;
+  }
 
-  // Switch to requested tab
-  switchQuickAddTab(targetTab);
+  // Slide track transform (each slide occupies 33.3333% of 300% track)
+  if (sliderTrack) {
+    sliderTrack.style.transform = `translateX(-${step * 33.33333}%)`;
+  }
 
-  // Reset inputs
-  quickTaskText.value = '';
-  quickNoteText.value = '';
-  quickTaskCustomDate.classList.add('hidden');
-  quickTaskCustomDate.value = '';
-
-  // Reset due chips
-  dueChipsContainer.querySelectorAll('.due-chip').forEach(btn => {
-    btn.classList.toggle('active', btn.dataset.due === 'Next Class');
-  });
-
-  quickAddModal.classList.remove('hidden');
-  setTimeout(() => {
-    if (targetTab === 'task') quickTaskText.focus();
-    else quickNoteText.focus();
-  }, 120);
-}
-
-function switchQuickAddTab(tab) {
-  if (tab === 'task') {
-    tabTaskBtn.classList.add('active');
-    tabNoteBtn.classList.remove('active');
-    quickTaskForm.classList.remove('hidden');
-    quickNoteForm.classList.add('hidden');
-  } else {
-    tabNoteBtn.classList.add('active');
-    tabTaskBtn.classList.remove('active');
-    quickNoteForm.classList.remove('hidden');
-    quickTaskForm.classList.add('hidden');
+  // Slide specific actions
+  if (step === 1) {
+    updateSlide2Meta();
+    setTimeout(() => {
+      if (sliderTextInput) sliderTextInput.focus();
+    }, 280);
+  } else if (step === 2 && sliderMode === 'task') {
+    updateSlide3Summary();
   }
 }
 
-tabTaskBtn.onclick = () => switchQuickAddTab('task');
-tabNoteBtn.onclick = () => switchQuickAddTab('note');
+function updateSlide2Meta() {
+  const display = getCourseDisplay(selectedCourseCode);
+  if (slideSelectedCourseLabel) {
+    slideSelectedCourseLabel.textContent = `For: ${display}`;
+  }
 
-// Due date chip buttons
-dueChipsContainer.querySelectorAll('.due-chip').forEach(btn => {
-  btn.onclick = () => {
-    dueChipsContainer.querySelectorAll('.due-chip').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-    selectedDueOption = btn.dataset.due;
-    if (selectedDueOption === 'Custom') {
-      quickTaskCustomDate.classList.remove('hidden');
-      quickTaskCustomDate.focus();
-    } else {
-      quickTaskCustomDate.classList.add('hidden');
+  if (sliderMode === 'task') {
+    if (slideTextTitle) slideTextTitle.textContent = 'What is the task?';
+    if (sliderTextInput) sliderTextInput.placeholder = 'e.g. Finish 1:50 floor plan draft and sections...';
+    if (sliderToStep3) sliderToStep3.classList.remove('hidden');
+    if (sliderSaveNoteBtn) sliderSaveNoteBtn.classList.add('hidden');
+  } else {
+    if (slideTextTitle) slideTextTitle.textContent = 'Add Class Note';
+    if (sliderTextInput) sliderTextInput.placeholder = 'Jot down desk critique feedback, materials needed, or professor notes...';
+    if (sliderToStep3) sliderToStep3.classList.add('hidden');
+    if (sliderSaveNoteBtn) sliderSaveNoteBtn.classList.remove('hidden');
+  }
+}
+
+function updateSlide3Summary() {
+  if (summaryCourse) {
+    summaryCourse.textContent = selectedCourseCode || 'Personal / General';
+  }
+  if (summaryTask) {
+    const text = sliderTextInput.value.trim() || 'Untitled task';
+    summaryTask.textContent = text;
+    summaryTask.title = text;
+  }
+  if (summaryDue) {
+    let due = selectedDueOption;
+    if (selectedDueOption === 'Custom' && sliderCustomDate && sliderCustomDate.value) {
+      due = sliderCustomDate.value;
     }
-  };
-});
+    summaryDue.textContent = due;
+  }
+}
 
-// Submit Quick Task
-quickTaskForm.onsubmit = (e) => {
-  e.preventDefault();
-  const text = quickTaskText.value.trim();
-  if (!text) return;
+function openSliderModal(mode = 'task', targetCourseCode = null) {
+  sliderMode = mode; // 'task' | 'note'
+
+  if (targetCourseCode !== null) {
+    selectedCourseCode = targetCourseCode;
+  } else if (currentCourse) {
+    selectedCourseCode = currentCourse.code;
+  } else {
+    selectedCourseCode = mode === 'note' ? 'Arch 2411' : null;
+  }
+
+  if (sliderModeTag) {
+    sliderModeTag.textContent = mode === 'task' ? 'ADD TASK' : 'ADD CLASS NOTE';
+  }
+
+  if (slideCourseTitle) {
+    slideCourseTitle.textContent = mode === 'task' ? 'Which course?' : 'Which class?';
+  }
+  if (slideCourseSubtitle) {
+    slideCourseSubtitle.textContent = mode === 'task' ? 'Select where this task belongs' : 'Select course for class notes';
+  }
+
+  // Clear inputs
+  if (sliderTextInput) sliderTextInput.value = '';
+  selectedDueOption = 'Next Class';
+  if (sliderCustomDate) {
+    sliderCustomDate.value = '';
+    sliderCustomDate.classList.add('hidden');
+  }
+
+  // Reset due option buttons
+  if (sliderDueOptions) {
+    sliderDueOptions.querySelectorAll('.slider-due-btn').forEach(btn => {
+      btn.classList.toggle('active', btn.dataset.due === 'Next Class');
+    });
+  }
+
+  renderSliderCourseList();
+  updateSlide2Meta();
+
+  // If already in a course or course was pre-specified, jump straight to step 1 (text input)
+  // Else start at step 0 (choose course)
+  if (targetCourseCode !== null || currentCourse !== null) {
+    setSliderStep(1);
+  } else {
+    setSliderStep(0);
+  }
+
+  sliderModal.classList.remove('hidden');
+}
+
+function saveSliderTask() {
+  const text = sliderTextInput.value.trim();
+  if (!text) {
+    setSliderStep(1);
+    if (sliderTextInput) sliderTextInput.focus();
+    return;
+  }
 
   let dueStr = selectedDueOption;
-  if (selectedDueOption === 'Custom' && quickTaskCustomDate.value) {
-    dueStr = quickTaskCustomDate.value;
+  if (selectedDueOption === 'Custom' && sliderCustomDate && sliderCustomDate.value) {
+    dueStr = sliderCustomDate.value;
   }
 
   const localTasks = getStorage(STORAGE_KEYS.LOCAL_TASKS, []);
@@ -808,28 +895,29 @@ quickTaskForm.onsubmit = (e) => {
     id: 'local-' + Date.now(),
     title: text,
     isLocal: true,
-    courseCode: selectedCourseForTask,
+    courseCode: selectedCourseCode,
     dueDate: dueStr
   };
 
   localTasks.unshift(newTask);
   setStorage(STORAGE_KEYS.LOCAL_TASKS, localTasks);
-  quickTaskText.value = '';
+  sliderTextInput.value = '';
 
   if (currentCourse) {
     renderCourseTasks(currentCourse.code);
   }
   renderTasksList();
-  quickAddModal.classList.add('hidden');
-};
+  sliderModal.classList.add('hidden');
+}
 
-// Submit Quick Class Note
-quickNoteForm.onsubmit = (e) => {
-  e.preventDefault();
-  const text = quickNoteText.value.trim();
-  if (!text) return;
+function saveSliderNote() {
+  const text = sliderTextInput.value.trim();
+  if (!text) {
+    if (sliderTextInput) sliderTextInput.focus();
+    return;
+  }
 
-  const targetCode = currentCourse ? currentCourse.code : (selectedCourseForNote || 'Arch 2411');
+  const targetCode = selectedCourseCode || (currentCourse ? currentCourse.code : 'Arch 2411');
   const notesMap = getStorage(STORAGE_KEYS.CLASS_NOTES, {});
   const existing = notesMap[targetCode] || '';
   const timestamp = new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
@@ -837,23 +925,74 @@ quickNoteForm.onsubmit = (e) => {
   notesMap[targetCode] = existing ? existing + '\n\n' + entry : entry;
   setStorage(STORAGE_KEYS.CLASS_NOTES, notesMap);
 
-  quickNoteText.value = '';
+  sliderTextInput.value = '';
 
   if (currentCourse && currentCourse.code === targetCode) {
     courseNotesTextarea.value = notesMap[targetCode];
     courseNotesHint.textContent = 'Saved just now';
   }
 
-  quickAddModal.classList.add('hidden');
-};
+  sliderModal.classList.add('hidden');
+}
 
-quickAddCloseBtn.onclick = () => {
-  quickAddModal.classList.add('hidden');
-};
+// Wire up Slider Controls
+if (sliderCancelBtn) {
+  sliderCancelBtn.onclick = () => sliderModal.classList.add('hidden');
+}
+if (sliderToStep2) {
+  sliderToStep2.onclick = () => setSliderStep(1);
+}
+if (sliderBackTo1) {
+  sliderBackTo1.onclick = () => setSliderStep(0);
+}
+if (sliderToStep3) {
+  sliderToStep3.onclick = () => {
+    if (!sliderTextInput.value.trim()) {
+      sliderTextInput.focus();
+      return;
+    }
+    setSliderStep(2);
+  };
+}
+if (sliderSaveNoteBtn) {
+  sliderSaveNoteBtn.onclick = () => saveSliderNote();
+}
+if (sliderBackTo2) {
+  sliderBackTo2.onclick = () => setSliderStep(1);
+}
+if (sliderSaveTaskBtn) {
+  sliderSaveTaskBtn.onclick = () => saveSliderTask();
+}
+if (sliderCloseBtn) {
+  sliderCloseBtn.onclick = () => sliderModal.classList.add('hidden');
+}
+if (sliderModal) {
+  sliderModal.onclick = (e) => {
+    if (e.target === sliderModal) sliderModal.classList.add('hidden');
+  };
+}
 
-quickAddModal.onclick = (e) => {
-  if (e.target === quickAddModal) quickAddModal.classList.add('hidden');
-};
+// Due options in slide 3
+if (sliderDueOptions) {
+  sliderDueOptions.querySelectorAll('.slider-due-btn').forEach(btn => {
+    btn.onclick = () => {
+      sliderDueOptions.querySelectorAll('.slider-due-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      selectedDueOption = btn.dataset.due;
+      if (selectedDueOption === 'Custom') {
+        sliderCustomDate.classList.remove('hidden');
+        sliderCustomDate.focus();
+      } else {
+        sliderCustomDate.classList.add('hidden');
+      }
+      updateSlide3Summary();
+    };
+  });
+}
+
+if (sliderCustomDate) {
+  sliderCustomDate.onchange = () => updateSlide3Summary();
+}
 
 // =============================================================================
 // 14. Context-Aware Floating Action Button (FAB) Flow
@@ -862,12 +1001,10 @@ quickAddModal.onclick = (e) => {
 function updateFABContext() {
   if (currentCourse) {
     fabAddTask.querySelector('span').textContent = `Task for ${currentCourse.code}`;
-    fabViewTasks.querySelector('span').textContent = `Note for ${currentCourse.code}`;
-    fabViewTasks.querySelector('i').className = 'ph ph-pencil-simple';
+    if (fabAddNote) fabAddNote.querySelector('span').textContent = `Note for ${currentCourse.code}`;
   } else {
     fabAddTask.querySelector('span').textContent = 'Add Task';
-    fabViewTasks.querySelector('span').textContent = 'All Tasks';
-    fabViewTasks.querySelector('i').className = 'ph ph-check-square-offset';
+    if (fabAddNote) fabAddNote.querySelector('span').textContent = 'Class Note';
   }
 }
 
@@ -886,27 +1023,33 @@ function initFAB() {
     }
   });
 
-  // FAB Option 1: Add Task (Asks course if on home, or pre-locks if in course)
+  // FAB Option 1: Add Task (Opens slider in task mode)
   fabAddTask.onclick = () => {
     mainFab.classList.remove('open');
     fabMenu.classList.add('hidden');
     const targetCode = currentCourse ? currentCourse.code : null;
-    openQuickAddModal(targetCode, 'task');
+    openSliderModal('task', targetCode);
   };
 
-  // FAB Option 2: Add Note (if in course) or View All Tasks (if on home)
+  // FAB Option 2: Add Class Note (Opens slider in note mode)
+  if (fabAddNote) {
+    fabAddNote.onclick = () => {
+      mainFab.classList.remove('open');
+      fabMenu.classList.add('hidden');
+      const targetCode = currentCourse ? currentCourse.code : null;
+      openSliderModal('note', targetCode);
+    };
+  }
+
+  // FAB Option 3: View All Tasks
   fabViewTasks.onclick = () => {
     mainFab.classList.remove('open');
     fabMenu.classList.add('hidden');
-    if (currentCourse) {
-      openQuickAddModal(currentCourse.code, 'note');
-    } else {
-      renderTasksList();
-      tasksModal.classList.remove('hidden');
-    }
+    renderTasksList();
+    tasksModal.classList.remove('hidden');
   };
 
-  // FAB Option 3: Daily Romantic Note
+  // FAB Option 4: Daily Romantic Note
   fabQuote.onclick = () => {
     mainFab.classList.remove('open');
     fabMenu.classList.add('hidden');
