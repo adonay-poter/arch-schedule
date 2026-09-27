@@ -112,6 +112,16 @@ const SCHEDULE_DATA = {
   }
 };
 
+const COURSE_OPTIONS = [
+  { code: null, name: 'Personal / General' },
+  { code: 'Arch 2411', name: 'Arch 2411 (Basic Design I)' },
+  { code: 'Arch 2351', name: 'Arch 2351 (Model Making)' },
+  { code: 'Arch 2541', name: 'Arch 2541 (Structures I)' },
+  { code: 'Arch 2311', name: 'Arch 2311 (Comm Skills I)' },
+  { code: 'Arch 2511', name: 'Arch 2511 (Materials I)' },
+  { code: 'Arch 2211', name: 'Arch 2211 (History I)' }
+];
+
 // =============================================================================
 // 2. Ge'ez Numeral Helper
 // =============================================================================
@@ -223,6 +233,9 @@ if (selectedDate.getDay() === 0 || selectedDate.getDay() === 6) {
 }
 
 let currentCourse = null;
+let selectedCourseForTask = null;
+let selectedCourseForNote = 'Arch 2411';
+let selectedDueOption = 'Next Class';
 
 // =============================================================================
 // 6. DOM References
@@ -280,12 +293,29 @@ const cheerTitle = document.getElementById('cheer-title');
 const cheerText = document.getElementById('cheer-text');
 const cheerCloseBtn = document.getElementById('cheer-close-btn');
 
-// Tasks Modal
+// All Tasks Modal
 const tasksModal = document.getElementById('tasks-modal');
 const tasksCloseBtn = document.getElementById('tasks-close-btn');
 const tasksList = document.getElementById('tasks-list');
 const addTaskForm = document.getElementById('add-task-form');
 const newTaskInput = document.getElementById('new-task-input');
+
+// Quick Add Task / Note Modal
+const quickAddModal = document.getElementById('quick-add-modal');
+const quickAddCloseBtn = document.getElementById('quick-add-close-btn');
+const quickAddModalTag = document.getElementById('quick-add-modal-tag');
+const tabTaskBtn = document.getElementById('tab-task-btn');
+const tabNoteBtn = document.getElementById('tab-note-btn');
+const quickTaskForm = document.getElementById('quick-task-form');
+const quickNoteForm = document.getElementById('quick-note-form');
+const courseSelectorLabel = document.getElementById('course-selector-label');
+const courseChipsContainer = document.getElementById('course-chips-container');
+const noteCourseSelectorLabel = document.getElementById('note-course-selector-label');
+const noteCourseChipsContainer = document.getElementById('note-course-chips-container');
+const quickTaskText = document.getElementById('quick-task-text');
+const dueChipsContainer = document.getElementById('due-chips-container');
+const quickTaskCustomDate = document.getElementById('quick-task-custom-date');
+const quickNoteText = document.getElementById('quick-note-text');
 
 // =============================================================================
 // 7. GitHub Content Sync (content.json)
@@ -567,6 +597,9 @@ function openCoursePage(cls) {
     courseNotesHint.textContent = 'Saved';
   };
 
+  // Update FAB context for this course
+  updateFABContext();
+
   // Switch views
   homeView.classList.add('hidden');
   courseView.classList.remove('hidden');
@@ -580,6 +613,8 @@ function closeCoursePage() {
   courseView.classList.add('hidden');
   homeView.classList.remove('hidden');
   currentCourse = null;
+  updateFABContext();
+
   if (window.location.hash) {
     history.replaceState(null, null, ' ');
   }
@@ -589,7 +624,6 @@ courseBackBtn.onclick = () => {
   closeCoursePage();
 };
 
-// Course tasks rendering
 function renderCourseTasks(courseCode) {
   const taskStatus = getStorage(STORAGE_KEYS.TASK_STATUS, {});
   const localTasks = getStorage(STORAGE_KEYS.LOCAL_TASKS, []);
@@ -601,7 +635,7 @@ function renderCourseTasks(courseCode) {
 
   courseTasksList.innerHTML = '';
   if (courseTasks.length === 0) {
-    courseTasksList.innerHTML = '<span style="font-size:0.8rem; color:var(--text-muted); padding:4px 0;">No tasks scheduled for this course. Add one above!</span>';
+    courseTasksList.innerHTML = '<span style="font-size:0.8rem; color:var(--text-muted); padding:4px 0;">No tasks scheduled for this course. Add one below!</span>';
     return;
   }
 
@@ -659,11 +693,183 @@ courseAddTaskForm.onsubmit = (e) => {
   setStorage(STORAGE_KEYS.LOCAL_TASKS, localTasks);
   courseNewTaskInput.value = '';
   renderCourseTasks(currentCourse.code);
+  renderTasksList();
 };
 
 // =============================================================================
-// 13. Minimal Floating Action Button (FAB) Flow
+// 13. Mobile-Friendly Course Picker & Quick Add Modal
 // =============================================================================
+
+function renderCourseChips(container, currentSelected, onSelect) {
+  container.innerHTML = '';
+  COURSE_OPTIONS.forEach(opt => {
+    const chip = document.createElement('button');
+    chip.type = 'button';
+    chip.className = `course-chip ${opt.code === currentSelected ? 'selected' : ''}`;
+    chip.textContent = opt.name;
+    chip.onclick = () => {
+      onSelect(opt.code);
+      renderCourseChips(container, opt.code, onSelect);
+    };
+    container.appendChild(chip);
+  });
+}
+
+function openQuickAddModal(targetCourseCode = null, targetTab = 'task') {
+  selectedCourseForTask = targetCourseCode;
+  selectedCourseForNote = targetCourseCode || 'Arch 2411';
+  selectedDueOption = 'Next Class';
+
+  // Contextual modal headers
+  if (targetCourseCode) {
+    quickAddModalTag.textContent = `ADD FOR ${targetCourseCode}`;
+    courseSelectorLabel.textContent = `COURSE: ${targetCourseCode}`;
+    noteCourseSelectorLabel.textContent = `COURSE: ${targetCourseCode}`;
+  } else {
+    quickAddModalTag.textContent = 'ADD TO SCHEDULE';
+    courseSelectorLabel.textContent = 'WHICH COURSE?';
+    noteCourseSelectorLabel.textContent = 'WHICH COURSE?';
+  }
+
+  // Render selection chips
+  renderCourseChips(courseChipsContainer, selectedCourseForTask, (code) => {
+    selectedCourseForTask = code;
+  });
+  renderCourseChips(noteCourseChipsContainer, selectedCourseForNote, (code) => {
+    selectedCourseForNote = code;
+  });
+
+  // Switch to requested tab
+  switchQuickAddTab(targetTab);
+
+  // Reset inputs
+  quickTaskText.value = '';
+  quickNoteText.value = '';
+  quickTaskCustomDate.classList.add('hidden');
+  quickTaskCustomDate.value = '';
+
+  // Reset due chips
+  dueChipsContainer.querySelectorAll('.due-chip').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.due === 'Next Class');
+  });
+
+  quickAddModal.classList.remove('hidden');
+  setTimeout(() => {
+    if (targetTab === 'task') quickTaskText.focus();
+    else quickNoteText.focus();
+  }, 120);
+}
+
+function switchQuickAddTab(tab) {
+  if (tab === 'task') {
+    tabTaskBtn.classList.add('active');
+    tabNoteBtn.classList.remove('active');
+    quickTaskForm.classList.remove('hidden');
+    quickNoteForm.classList.add('hidden');
+  } else {
+    tabNoteBtn.classList.add('active');
+    tabTaskBtn.classList.remove('active');
+    quickNoteForm.classList.remove('hidden');
+    quickTaskForm.classList.add('hidden');
+  }
+}
+
+tabTaskBtn.onclick = () => switchQuickAddTab('task');
+tabNoteBtn.onclick = () => switchQuickAddTab('note');
+
+// Due date chip buttons
+dueChipsContainer.querySelectorAll('.due-chip').forEach(btn => {
+  btn.onclick = () => {
+    dueChipsContainer.querySelectorAll('.due-chip').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    selectedDueOption = btn.dataset.due;
+    if (selectedDueOption === 'Custom') {
+      quickTaskCustomDate.classList.remove('hidden');
+      quickTaskCustomDate.focus();
+    } else {
+      quickTaskCustomDate.classList.add('hidden');
+    }
+  };
+});
+
+// Submit Quick Task
+quickTaskForm.onsubmit = (e) => {
+  e.preventDefault();
+  const text = quickTaskText.value.trim();
+  if (!text) return;
+
+  let dueStr = selectedDueOption;
+  if (selectedDueOption === 'Custom' && quickTaskCustomDate.value) {
+    dueStr = quickTaskCustomDate.value;
+  }
+
+  const localTasks = getStorage(STORAGE_KEYS.LOCAL_TASKS, []);
+  const newTask = {
+    id: 'local-' + Date.now(),
+    title: text,
+    isLocal: true,
+    courseCode: selectedCourseForTask,
+    dueDate: dueStr
+  };
+
+  localTasks.unshift(newTask);
+  setStorage(STORAGE_KEYS.LOCAL_TASKS, localTasks);
+  quickTaskText.value = '';
+
+  if (currentCourse) {
+    renderCourseTasks(currentCourse.code);
+  }
+  renderTasksList();
+  quickAddModal.classList.add('hidden');
+};
+
+// Submit Quick Class Note
+quickNoteForm.onsubmit = (e) => {
+  e.preventDefault();
+  const text = quickNoteText.value.trim();
+  if (!text) return;
+
+  const targetCode = currentCourse ? currentCourse.code : (selectedCourseForNote || 'Arch 2411');
+  const notesMap = getStorage(STORAGE_KEYS.CLASS_NOTES, {});
+  const existing = notesMap[targetCode] || '';
+  const timestamp = new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+  const entry = `• [${timestamp}] ${text}`;
+  notesMap[targetCode] = existing ? existing + '\n\n' + entry : entry;
+  setStorage(STORAGE_KEYS.CLASS_NOTES, notesMap);
+
+  quickNoteText.value = '';
+
+  if (currentCourse && currentCourse.code === targetCode) {
+    courseNotesTextarea.value = notesMap[targetCode];
+    courseNotesHint.textContent = 'Saved just now';
+  }
+
+  quickAddModal.classList.add('hidden');
+};
+
+quickAddCloseBtn.onclick = () => {
+  quickAddModal.classList.add('hidden');
+};
+
+quickAddModal.onclick = (e) => {
+  if (e.target === quickAddModal) quickAddModal.classList.add('hidden');
+};
+
+// =============================================================================
+// 14. Context-Aware Floating Action Button (FAB) Flow
+// =============================================================================
+
+function updateFABContext() {
+  if (currentCourse) {
+    fabAddTask.querySelector('span').textContent = `Task for ${currentCourse.code}`;
+    fabViewTasks.querySelector('span').textContent = `Note for ${currentCourse.code}`;
+    fabViewTasks.querySelector('i').className = 'ph ph-pencil-simple';
+  } else {
+    fabAddTask.querySelector('span').textContent = 'Add Task';
+    fabViewTasks.querySelector('span').textContent = 'All Tasks';
+    fabViewTasks.querySelector('i').className = 'ph ph-check-square-offset';
+  }
+}
 
 function initFAB() {
   mainFab.onclick = (e) => {
@@ -680,21 +886,24 @@ function initFAB() {
     }
   });
 
-  // FAB Option 1: Quick Add Task
+  // FAB Option 1: Add Task (Asks course if on home, or pre-locks if in course)
   fabAddTask.onclick = () => {
     mainFab.classList.remove('open');
     fabMenu.classList.add('hidden');
-    renderTasksList();
-    tasksModal.classList.remove('hidden');
-    setTimeout(() => newTaskInput.focus(), 150);
+    const targetCode = currentCourse ? currentCourse.code : null;
+    openQuickAddModal(targetCode, 'task');
   };
 
-  // FAB Option 2: View All Tasks
+  // FAB Option 2: Add Note (if in course) or View All Tasks (if on home)
   fabViewTasks.onclick = () => {
     mainFab.classList.remove('open');
     fabMenu.classList.add('hidden');
-    renderTasksList();
-    tasksModal.classList.remove('hidden');
+    if (currentCourse) {
+      openQuickAddModal(currentCourse.code, 'note');
+    } else {
+      renderTasksList();
+      tasksModal.classList.remove('hidden');
+    }
   };
 
   // FAB Option 3: Daily Romantic Note
@@ -710,7 +919,7 @@ function initFAB() {
 }
 
 // =============================================================================
-// 14. All Tasks Modal Flow
+// 15. All Tasks Modal Flow
 // =============================================================================
 
 function renderTasksList() {
@@ -754,6 +963,7 @@ function renderTasksList() {
         const updatedLocal = localTasks.filter(t => t.id !== task.id);
         setStorage(STORAGE_KEYS.LOCAL_TASKS, updatedLocal);
         renderTasksList();
+        if (currentCourse) renderCourseTasks(currentCourse.code);
       };
     }
 
@@ -795,7 +1005,7 @@ addTaskForm.onsubmit = (e) => {
 };
 
 // =============================================================================
-// 15. General Dismissals, Navigation & History
+// 16. General Dismissals, Navigation & History
 // =============================================================================
 
 cheerCloseBtn.onclick = () => {
@@ -833,7 +1043,7 @@ window.addEventListener('hashchange', () => {
 });
 
 // =============================================================================
-// 16. Service Worker Registration (PWA)
+// 17. Service Worker Registration (PWA)
 // =============================================================================
 
 if ('serviceWorker' in navigator) {
@@ -845,7 +1055,7 @@ if ('serviceWorker' in navigator) {
 }
 
 // =============================================================================
-// 17. Initial Run
+// 18. Initial Run
 // =============================================================================
 
 function initApp() {

@@ -1199,3 +1199,147 @@ body {
   color: var(--text-inverse);
   border-color: var(--text-primary);
 }
+
+/* ==========================================================================
+   Quick Add Task / Note Modal Components
+   ========================================================================== */
+
+.modal-tabs {
+  display: flex;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-xs);
+  overflow: hidden;
+  margin-bottom: 4px;
+}
+
+.tab-btn {
+  flex: 1;
+  background: var(--surface-hover);
+  border: none;
+  color: var(--text-secondary);
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  padding: 9px 12px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  letter-spacing: 0.05em;
+  transition: var(--transition);
+}
+
+.tab-btn.active {
+  background: var(--text-primary);
+  color: var(--text-inverse);
+  font-weight: 700;
+}
+
+.quick-form-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.quick-form-panel.hidden {
+  display: none !important;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.form-label {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  color: var(--text-secondary);
+  letter-spacing: 0.12em;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.course-chips-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.course-chip {
+  background: var(--surface-hover);
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  padding: 6px 10px;
+  border-radius: var(--radius-xs);
+  cursor: pointer;
+  transition: var(--transition);
+  white-space: nowrap;
+  user-select: none;
+}
+
+.course-chip:hover {
+  border-color: var(--border-strong);
+  color: var(--text-primary);
+}
+
+.course-chip.selected {
+  background: var(--text-primary);
+  color: var(--text-inverse);
+  border-color: var(--text-primary);
+  font-weight: 600;
+}
+
+.due-chips-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.due-chip {
+  background: var(--surface-hover);
+  border: 1px solid var(--border-color);
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  padding: 5px 9px;
+  border-radius: var(--radius-xs);
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.due-chip:hover {
+  color: var(--text-secondary);
+}
+
+.due-chip.active {
+  border-color: var(--border-strong);
+  color: var(--text-primary);
+  background: #1e1e1e;
+  font-weight: 500;
+}
+
+.submit-action-btn {
+  background: var(--text-primary);
+  color: var(--text-inverse);
+  border: none;
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  padding: 12px;
+  border-radius: var(--radius-xs);
+  cursor: pointer;
+  margin-top: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  transition: var(--transition);
+}
+
+.submit-action-btn:active {
+  transform: scale(0.98);
+}
