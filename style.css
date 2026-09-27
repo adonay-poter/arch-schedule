@@ -1257,25 +1257,30 @@ body {
   overflow: hidden;
   width: 100%;
   flex: 1;
-  display: flex;
   position: relative;
+  display: block;
 }
 
 .slider-track {
   display: flex;
+  flex-direction: row;
   width: 300%;
+  min-width: 300%;
+  flex-shrink: 0;
   height: 100%;
   transition: transform 0.32s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .slider-slide {
-  width: 33.3333%;
-  flex: 0 0 33.3333%;
+  width: 33.333333%;
+  min-width: 33.333333%;
+  max-width: 33.333333%;
+  flex: 0 0 33.333333%;
+  box-sizing: border-box;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  box-sizing: border-box;
-  padding: 2px 2px 8px 2px;
+  padding: 2px 4px 8px 4px;
 }
 
 .slide-content {
@@ -1307,7 +1312,22 @@ body {
   gap: 7px;
   max-height: 250px;
   overflow-y: auto;
-  padding-right: 2px;
+  padding-right: 4px;
+  scrollbar-width: thin;
+  scrollbar-color: #333333 transparent;
+}
+
+.slider-course-list::-webkit-scrollbar {
+  width: 4px;
+}
+
+.slider-course-list::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.slider-course-list::-webkit-scrollbar-thumb {
+  background: #333333;
+  border-radius: 2px;
 }
 
 .slider-course-card {
