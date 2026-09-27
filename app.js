@@ -113,7 +113,27 @@ const SCHEDULE_DATA = {
 };
 
 // =============================================================================
-// 2. Default Fallback Data (Synced & Overridden by content.json)
+// 2. Ge'ez Numeral Helper
+// =============================================================================
+
+function toGeez(num) {
+  if (num < 1) return '';
+  const digits = ['', '፩', '፪', '፫', '፬', '፭', '፮', '፯', '፰', '፱'];
+  const tens = ['', '፲', '፳', '፴', '፵', '፶', '፷', '፸', '፹', '፺'];
+
+  if (num <= 9) return digits[num];
+  if (num === 10) return '፲';
+  if (num < 20) return '፲' + digits[num - 10];
+  if (num < 100) {
+    const t = Math.floor(num / 10);
+    const r = num % 10;
+    return tens[t] + (r > 0 ? digits[r] : '');
+  }
+  return num.toString();
+}
+
+// =============================================================================
+// 3. Fallback Data (Synced & Overridden by content.json)
 // =============================================================================
 
 let appQuotes = [
@@ -148,7 +168,6 @@ let appQuotes = [
 ];
 
 let appAssignments = [];
-let appStudioGear = {};
 
 const CHEER_MESSAGES = [
   {
@@ -166,14 +185,13 @@ const CHEER_MESSAGES = [
 ];
 
 // =============================================================================
-// 3. LocalStorage Helpers
+// 4. LocalStorage Helpers
 // =============================================================================
 
 const STORAGE_KEYS = {
   TASK_STATUS: 'arch_task_status',
   LOCAL_TASKS: 'arch_local_tasks',
-  CLASS_NOTES: 'arch_class_notes',
-  GEAR_STATUS: 'arch_gear_status'
+  CLASS_NOTES: 'arch_class_notes'
 };
 
 function getStorage(key, defaultVal) {
@@ -194,7 +212,7 @@ function setStorage(key, val) {
 }
 
 // =============================================================================
-// 4. State Management
+// 5. State Management
 // =============================================================================
 
 let selectedDate = new Date();
@@ -204,12 +222,17 @@ if (selectedDate.getDay() === 0 || selectedDate.getDay() === 6) {
   selectedDate.setDate(selectedDate.getDate() + diff);
 }
 
-let activeClassModalCode = null;
+let currentCourse = null;
 
 // =============================================================================
-// 5. DOM References
+// 6. DOM References
 // =============================================================================
 
+// Views
+const homeView = document.getElementById('home-view');
+const courseView = document.getElementById('course-view');
+
+// Header & Quote
 const quoteCard = document.getElementById('quote-card');
 const quotePreview = document.getElementById('quote-preview');
 const quoteModal = document.getElementById('quote-modal');
@@ -217,19 +240,41 @@ const modalQuoteText = document.getElementById('modal-quote-text');
 const modalQuoteAuthor = document.getElementById('modal-quote-author');
 const modalCloseBtn = document.getElementById('modal-close-btn');
 
+// Day Hero Card
 const heroDayCard = document.getElementById('hero-day-card');
-const dayNumeral = document.getElementById('day-numeral');
+const numEnglish = document.getElementById('num-english');
+const numGeez = document.getElementById('num-geez');
 const dayFullDate = document.getElementById('day-full-date');
 const todayBtn = document.getElementById('today-btn');
 const tasksBtn = document.getElementById('tasks-btn');
 
+// Week Strip & Timeline
 const weekStripContainer = document.getElementById('week-strip-container');
 const weekRangeText = document.getElementById('week-range-text');
-
 const timelineDayTitle = document.getElementById('timeline-day-title');
 const timelineDayStatus = document.getElementById('timeline-day-status');
 const timelineContainer = document.getElementById('timeline-container');
 
+// Course Detailed Page
+const courseBackBtn = document.getElementById('course-back-btn');
+const courseViewCode = document.getElementById('course-view-code');
+const courseViewTitle = document.getElementById('course-view-title');
+const courseViewMeta = document.getElementById('course-view-meta');
+const courseTaskCount = document.getElementById('course-task-count');
+const courseAddTaskForm = document.getElementById('course-add-task-form');
+const courseNewTaskInput = document.getElementById('course-new-task-input');
+const courseTasksList = document.getElementById('course-tasks-list');
+const courseNotesTextarea = document.getElementById('course-notes-textarea');
+const courseNotesHint = document.getElementById('course-notes-hint');
+
+// Floating Action Button (FAB)
+const mainFab = document.getElementById('main-fab');
+const fabMenu = document.getElementById('fab-menu');
+const fabAddTask = document.getElementById('fab-add-task');
+const fabViewTasks = document.getElementById('fab-view-tasks');
+const fabQuote = document.getElementById('fab-quote');
+
+// Cheer Modal
 const cheerModal = document.getElementById('cheer-modal');
 const cheerTitle = document.getElementById('cheer-title');
 const cheerText = document.getElementById('cheer-text');
@@ -242,19 +287,8 @@ const tasksList = document.getElementById('tasks-list');
 const addTaskForm = document.getElementById('add-task-form');
 const newTaskInput = document.getElementById('new-task-input');
 
-// Class Details & Notes Modal
-const classModal = document.getElementById('class-modal');
-const classModalCloseBtn = document.getElementById('class-modal-close-btn');
-const classModalCode = document.getElementById('class-modal-code');
-const classModalTitle = document.getElementById('class-modal-title');
-const classModalMeta = document.getElementById('class-modal-meta');
-const classModalTasks = document.getElementById('class-modal-tasks');
-const classModalGear = document.getElementById('class-modal-gear');
-const classModalNotes = document.getElementById('class-modal-notes');
-const notesSavedHint = document.getElementById('notes-saved-hint');
-
 // =============================================================================
-// 6. GitHub Remote Sync Engine (content.json)
+// 7. GitHub Content Sync (content.json)
 // =============================================================================
 
 async function syncRemoteContent() {
@@ -269,19 +303,19 @@ async function syncRemoteContent() {
     if (data.assignments && Array.isArray(data.assignments)) {
       appAssignments = data.assignments;
     }
-    if (data.studio_gear && typeof data.studio_gear === 'object') {
-      appStudioGear = data.studio_gear;
-    }
 
     setupDailyQuote();
     renderTasksList();
+    if (currentCourse) {
+      renderCourseTasks(currentCourse.code);
+    }
   } catch (err) {
     console.log('Using offline cached content:', err);
   }
 }
 
 // =============================================================================
-// 7. Daily Quote Flow
+// 8. Daily Quote Flow
 // =============================================================================
 
 function setupDailyQuote() {
@@ -314,7 +348,7 @@ quoteModal.onclick = (e) => {
 };
 
 // =============================================================================
-// 8. Day Hero Card (English Numbers in SurGraphics Font, Left-Aligned Date)
+// 9. Day Hero Card (English | Ge'ez Numeral)
 // =============================================================================
 
 function updateHeroDay() {
@@ -329,17 +363,20 @@ function updateHeroDay() {
   const gMonth = monthNames[selectedDate.getMonth()];
   const gDayName = dayNames[dayOfWeek];
 
-  dayNumeral.textContent = gDay;
+  // Display English number and Ge'ez numeral side-by-side with "|" divider
+  numEnglish.textContent = gDay;
+  numGeez.textContent = toGeez(gDay);
   dayFullDate.textContent = `${gDayName}, ${gMonth} ${gDay}`;
 
-  dayNumeral.style.transform = 'scale(0.92)';
+  const numeralWrapper = document.getElementById('day-numeral');
+  numeralWrapper.style.transform = 'scale(0.94)';
   setTimeout(() => {
-    dayNumeral.style.transform = 'scale(1)';
+    numeralWrapper.style.transform = 'scale(1)';
   }, 40);
 }
 
 // =============================================================================
-// 9. 5-Day Week Strip (MON, TUE, WED, THU, FRI)
+// 10. 5-Day Week Strip (MON, TUE, WED, THU, FRI)
 // =============================================================================
 
 function renderWeekStrip() {
@@ -397,7 +434,7 @@ function renderWeekStrip() {
 }
 
 // =============================================================================
-// 10. Timeline & Free Day Rendering
+// 11. Timeline & Free Day Rendering
 // =============================================================================
 
 function renderTimeline() {
@@ -446,7 +483,7 @@ function renderTimeline() {
 
   const classes = daySchedule.classes;
   const count = classes.length;
-  timelineDayStatus.textContent = `${count} ${count === 1 ? 'Class' : 'Classes'} Scheduled • Tap for notes`;
+  timelineDayStatus.textContent = `${count} ${count === 1 ? 'Class' : 'Classes'} Scheduled • Tap for details`;
 
   const currentTotalMins = realNow.getHours() * 60 + realNow.getMinutes();
 
@@ -487,14 +524,14 @@ function renderTimeline() {
 
         <div class="class-details-row">
           <span>Semester I</span>
-          <span style="color:var(--text-secondary);"><i class="ph ph-notepad"></i> Notes & Gear ↗</span>
+          <span style="color:var(--text-secondary);"><i class="ph ph-notepad"></i> Open Details ↗</span>
         </div>
       </div>
     `;
 
-    // Click class card to open class modal
+    // Tap class card to open the dedicated Course Detailed Page View
     item.querySelector('.class-card').onclick = () => {
-      openClassModal(cls);
+      openCoursePage(cls);
     };
 
     timelineContainer.appendChild(item);
@@ -502,113 +539,178 @@ function renderTimeline() {
 }
 
 // =============================================================================
-// 11. Class Details, Studio Gear & Personal Notes Modal
+// 12. Course Detailed Page Flow (Dedicated Screen with Back Button)
 // =============================================================================
 
-function openClassModal(cls) {
-  activeClassModalCode = cls.code;
-  classModalCode.textContent = cls.code;
-  classModalTitle.textContent = cls.title;
+function openCoursePage(cls) {
+  currentCourse = cls;
+  courseViewCode.textContent = cls.code;
+  courseViewTitle.textContent = cls.title;
 
-  classModalMeta.innerHTML = `
+  courseViewMeta.innerHTML = `
     <div><i class="ph ph-clock"></i> ${cls.timeStr} (${cls.periods})</div>
     <div><i class="ph ph-map-pin"></i> ${cls.room}</div>
     <div><i class="ph ph-user"></i> ${cls.instructor}</div>
   `;
 
-  // Render course-specific assignments
-  const taskStatus = getStorage(STORAGE_KEYS.TASK_STATUS, {});
-  const localTasks = getStorage(STORAGE_KEYS.LOCAL_TASKS, []);
-  const allTasks = [...appAssignments, ...localTasks];
-  const courseTasks = allTasks.filter(t => t.courseCode === cls.code);
-
-  classModalTasks.innerHTML = '';
-  if (courseTasks.length === 0) {
-    classModalTasks.innerHTML = '<span style="font-size:0.78rem; color:var(--text-muted);">No pending assignments for this class.</span>';
-  } else {
-    courseTasks.forEach(task => {
-      const isDone = !!taskStatus[task.id];
-      const div = document.createElement('div');
-      div.className = `task-item ${isDone ? 'completed' : ''}`;
-      div.innerHTML = `
-        <input type="checkbox" class="task-checkbox" ${isDone ? 'checked' : ''}>
-        <div class="task-content">
-          <div class="task-title">${task.title}</div>
-          ${task.dueDate ? `<div class="task-due"><i class="ph ph-calendar"></i> Due ${task.dueDate}</div>` : ''}
-        </div>
-      `;
-      div.querySelector('.task-checkbox').onchange = (e) => {
-        taskStatus[task.id] = e.target.checked;
-        setStorage(STORAGE_KEYS.TASK_STATUS, taskStatus);
-        div.classList.toggle('completed', e.target.checked);
-      };
-      classModalTasks.appendChild(div);
-    });
-  }
-
-  // Render Studio Gear Checklist
-  const gearStatus = getStorage(STORAGE_KEYS.GEAR_STATUS, {});
-  const gearItems = appStudioGear[cls.code] || [];
-  classModalGear.innerHTML = '';
-
-  if (gearItems.length === 0) {
-    classModalGear.innerHTML = '<span style="font-size:0.78rem; color:var(--text-muted);">Standard notebook & pens.</span>';
-  } else {
-    gearItems.forEach(item => {
-      const key = `${cls.code}_${item}`;
-      const isChecked = !!gearStatus[key];
-      const div = document.createElement('div');
-      div.className = `gear-item ${isChecked ? 'checked' : ''}`;
-      div.innerHTML = `
-        <input type="checkbox" class="gear-checkbox" ${isChecked ? 'checked' : ''}>
-        <span>${item}</span>
-      `;
-
-      const cb = div.querySelector('.gear-checkbox');
-      const toggle = () => {
-        cb.checked = !cb.checked;
-        gearStatus[key] = cb.checked;
-        setStorage(STORAGE_KEYS.GEAR_STATUS, gearStatus);
-        div.classList.toggle('checked', cb.checked);
-      };
-
-      div.onclick = (e) => {
-        if (e.target !== cb) toggle();
-      };
-      cb.onchange = () => {
-        gearStatus[key] = cb.checked;
-        setStorage(STORAGE_KEYS.GEAR_STATUS, gearStatus);
-        div.classList.toggle('checked', cb.checked);
-      };
-
-      classModalGear.appendChild(div);
-    });
-  }
+  // Render course-specific tasks
+  renderCourseTasks(cls.code);
 
   // Load and auto-save personal class notes
   const notesMap = getStorage(STORAGE_KEYS.CLASS_NOTES, {});
-  classModalNotes.value = notesMap[cls.code] || '';
-  notesSavedHint.textContent = notesMap[cls.code] ? 'Saved' : 'Auto-saves as you type';
+  courseNotesTextarea.value = notesMap[cls.code] || '';
+  courseNotesHint.textContent = notesMap[cls.code] ? 'Saved' : 'Auto-saves as you type';
 
-  classModalNotes.oninput = () => {
-    notesMap[cls.code] = classModalNotes.value;
+  courseNotesTextarea.oninput = () => {
+    notesMap[cls.code] = courseNotesTextarea.value;
     setStorage(STORAGE_KEYS.CLASS_NOTES, notesMap);
-    notesSavedHint.textContent = 'Saved';
+    courseNotesHint.textContent = 'Saved';
   };
 
-  classModal.classList.remove('hidden');
+  // Switch views
+  homeView.classList.add('hidden');
+  courseView.classList.remove('hidden');
+  window.scrollTo(0, 0);
+
+  // Update URL hash for native back button support
+  window.location.hash = 'course-' + cls.code.replace(/\s+/g, '-');
 }
 
-classModalCloseBtn.onclick = () => {
-  classModal.classList.add('hidden');
+function closeCoursePage() {
+  courseView.classList.add('hidden');
+  homeView.classList.remove('hidden');
+  currentCourse = null;
+  if (window.location.hash) {
+    history.replaceState(null, null, ' ');
+  }
+}
+
+courseBackBtn.onclick = () => {
+  closeCoursePage();
 };
 
-classModal.onclick = (e) => {
-  if (e.target === classModal) classModal.classList.add('hidden');
+// Course tasks rendering
+function renderCourseTasks(courseCode) {
+  const taskStatus = getStorage(STORAGE_KEYS.TASK_STATUS, {});
+  const localTasks = getStorage(STORAGE_KEYS.LOCAL_TASKS, []);
+  const allTasks = [...appAssignments, ...localTasks];
+  const courseTasks = allTasks.filter(t => t.courseCode === courseCode);
+
+  const pendingCount = courseTasks.filter(t => !taskStatus[t.id]).length;
+  courseTaskCount.textContent = `${pendingCount} Pending`;
+
+  courseTasksList.innerHTML = '';
+  if (courseTasks.length === 0) {
+    courseTasksList.innerHTML = '<span style="font-size:0.8rem; color:var(--text-muted); padding:4px 0;">No tasks scheduled for this course. Add one above!</span>';
+    return;
+  }
+
+  courseTasks.forEach(task => {
+    const isDone = !!taskStatus[task.id];
+    const isLocal = !!task.isLocal;
+    const div = document.createElement('div');
+    div.className = `task-item ${isDone ? 'completed' : ''}`;
+    div.innerHTML = `
+      <input type="checkbox" class="task-checkbox" ${isDone ? 'checked' : ''}>
+      <div class="task-content">
+        <div class="task-title">${task.title}</div>
+        ${task.description ? `<p class="task-desc">${task.description}</p>` : ''}
+        ${task.dueDate ? `<div class="task-due"><i class="ph ph-calendar"></i> Due ${task.dueDate}</div>` : ''}
+      </div>
+      ${isLocal ? `<button class="task-delete-btn" title="Delete task"><i class="ph ph-trash"></i></button>` : ''}
+    `;
+
+    div.querySelector('.task-checkbox').onchange = (e) => {
+      taskStatus[task.id] = e.target.checked;
+      setStorage(STORAGE_KEYS.TASK_STATUS, taskStatus);
+      div.classList.toggle('completed', e.target.checked);
+      const updatedPending = courseTasks.filter(t => !taskStatus[t.id]).length;
+      courseTaskCount.textContent = `${updatedPending} Pending`;
+    };
+
+    if (isLocal) {
+      div.querySelector('.task-delete-btn').onclick = () => {
+        const updatedLocal = localTasks.filter(t => t.id !== task.id);
+        setStorage(STORAGE_KEYS.LOCAL_TASKS, updatedLocal);
+        renderCourseTasks(courseCode);
+      };
+    }
+
+    courseTasksList.appendChild(div);
+  });
+}
+
+// Quick Add Task Form inside Course Page
+courseAddTaskForm.onsubmit = (e) => {
+  e.preventDefault();
+  const text = courseNewTaskInput.value.trim();
+  if (!text || !currentCourse) return;
+
+  const localTasks = getStorage(STORAGE_KEYS.LOCAL_TASKS, []);
+  const newTask = {
+    id: 'local-' + Date.now(),
+    title: text,
+    isLocal: true,
+    courseCode: currentCourse.code,
+    dueDate: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
+  };
+
+  localTasks.unshift(newTask);
+  setStorage(STORAGE_KEYS.LOCAL_TASKS, localTasks);
+  courseNewTaskInput.value = '';
+  renderCourseTasks(currentCourse.code);
 };
 
 // =============================================================================
-// 12. All Tasks & Deadlines Modal Flow
+// 13. Minimal Floating Action Button (FAB) Flow
+// =============================================================================
+
+function initFAB() {
+  mainFab.onclick = (e) => {
+    e.stopPropagation();
+    const isOpen = mainFab.classList.toggle('open');
+    fabMenu.classList.toggle('hidden', !isOpen);
+  };
+
+  // Close FAB menu on outside tap
+  document.addEventListener('click', (e) => {
+    if (!e.target.closest('#fab-wrapper')) {
+      mainFab.classList.remove('open');
+      fabMenu.classList.add('hidden');
+    }
+  });
+
+  // FAB Option 1: Quick Add Task
+  fabAddTask.onclick = () => {
+    mainFab.classList.remove('open');
+    fabMenu.classList.add('hidden');
+    renderTasksList();
+    tasksModal.classList.remove('hidden');
+    setTimeout(() => newTaskInput.focus(), 150);
+  };
+
+  // FAB Option 2: View All Tasks
+  fabViewTasks.onclick = () => {
+    mainFab.classList.remove('open');
+    fabMenu.classList.add('hidden');
+    renderTasksList();
+    tasksModal.classList.remove('hidden');
+  };
+
+  // FAB Option 3: Daily Romantic Note
+  fabQuote.onclick = () => {
+    mainFab.classList.remove('open');
+    fabMenu.classList.add('hidden');
+    const dayIndex = selectedDate.getDate() % appQuotes.length;
+    const currentQuote = appQuotes[dayIndex];
+    modalQuoteText.textContent = `"${currentQuote.quote}"`;
+    modalQuoteAuthor.textContent = `— ${currentQuote.author}`;
+    quoteModal.classList.remove('hidden');
+  };
+}
+
+// =============================================================================
+// 14. All Tasks Modal Flow
 // =============================================================================
 
 function renderTasksList() {
@@ -672,7 +774,6 @@ tasksModal.onclick = (e) => {
   if (e.target === tasksModal) tasksModal.classList.add('hidden');
 };
 
-// Add personal task form
 addTaskForm.onsubmit = (e) => {
   e.preventDefault();
   const text = newTaskInput.value.trim();
@@ -694,7 +795,7 @@ addTaskForm.onsubmit = (e) => {
 };
 
 // =============================================================================
-// 13. General Dismissals & Today Button
+// 15. General Dismissals, Navigation & History
 // =============================================================================
 
 cheerCloseBtn.onclick = () => {
@@ -715,14 +816,24 @@ todayBtn.onclick = () => {
   } else {
     selectedDate = new Date(currentNow);
   }
+  if (!courseView.classList.contains('hidden')) {
+    closeCoursePage();
+  }
   renderWeekStrip();
   updateHeroDay();
   renderTimeline();
   setupDailyQuote();
 };
 
+// Back button browser/mobile support via hashchange
+window.addEventListener('hashchange', () => {
+  if (!window.location.hash && !courseView.classList.contains('hidden')) {
+    closeCoursePage();
+  }
+});
+
 // =============================================================================
-// 14. Service Worker Registration (PWA)
+// 16. Service Worker Registration (PWA)
 // =============================================================================
 
 if ('serviceWorker' in navigator) {
@@ -734,7 +845,7 @@ if ('serviceWorker' in navigator) {
 }
 
 // =============================================================================
-// 15. Initial Run
+// 17. Initial Run
 // =============================================================================
 
 function initApp() {
@@ -742,6 +853,7 @@ function initApp() {
   renderWeekStrip();
   renderTimeline();
   setupDailyQuote();
+  initFAB();
   syncRemoteContent();
 }
 

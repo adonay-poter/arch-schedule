@@ -27,74 +27,158 @@
 <body>
   <div class="app-container">
     
-    <!-- Top Header & Quote for the Day -->
-    <header class="app-header">
-      <div class="top-meta">
-        <span class="brand-tag">SEMESTER I SCHEDULE</span>
-        <div class="header-actions">
-          <button id="tasks-btn" class="chip-btn" title="View all assignments and tasks">
-            <i class="ph ph-check-square-offset"></i> TASKS
-          </button>
-          <button id="today-btn" class="chip-btn" title="Jump to today">
-            <i class="ph ph-calendar-blank"></i> TODAY
-          </button>
-        </div>
-      </div>
-
-      <!-- Quote Card (clickable to open popup) -->
-      <div id="quote-card" class="quote-card" role="button" tabindex="0" aria-label="Open daily quote">
-        <div class="quote-header">
-          <span class="quote-label">A QUOTE FOR THE DAY</span>
-          <span class="quote-action">Read <i class="ph ph-arrow-up-right"></i></span>
-        </div>
-        <p id="quote-preview" class="quote-preview">Loading quote for you...</p>
-      </div>
-    </header>
-
-    <!-- Main Central Card: The Day -->
-    <main class="main-content">
-      <section class="day-hero-card" id="hero-day-card">
-        <!-- Day Full Date aligned to the left as requested -->
-        <div class="day-date-left" id="day-full-date">Monday, September 28</div>
-
-        <!-- Big English Day Numeral in SurGraphics font -->
-        <div class="day-numeral-wrapper">
-          <div id="day-numeral" class="day-numeral">28</div>
-        </div>
-      </section>
-
-      <!-- 5 Days of the Week Mini Cards Strip (Mon - Fri) -->
-      <section class="week-strip-section" aria-label="Week Days">
-        <div class="week-strip-header">
-          <span class="section-label">DAYS OF THE WEEK</span>
-          <span class="week-range" id="week-range-text">THIS WEEK</span>
-        </div>
-        <div class="week-strip" id="week-strip-container">
-          <!-- 5 day cards dynamically inserted here -->
-        </div>
-      </section>
-
-      <!-- Timeline Schedule Section -->
-      <section class="timeline-section" aria-label="Day Schedule">
-        <div class="timeline-header">
-          <div>
-            <h2 class="timeline-title" id="timeline-day-title">Today</h2>
-            <p class="timeline-subtitle" id="timeline-day-status">Checking schedule...</p>
+    <!-- ====================================================================
+         VIEW 1: Main Home & Schedule View
+         ==================================================================== -->
+    <div id="home-view" class="view-page active">
+      
+      <!-- Top Header & Quote for the Day -->
+      <header class="app-header">
+        <div class="top-meta">
+          <span class="brand-tag">SEMESTER I SCHEDULE</span>
+          <div class="header-actions">
+            <button id="tasks-btn" class="chip-btn" title="View all assignments and tasks">
+              <i class="ph ph-check-square-offset"></i> TASKS
+            </button>
+            <button id="today-btn" class="chip-btn" title="Jump to today">
+              <i class="ph ph-calendar-blank"></i> TODAY
+            </button>
           </div>
         </div>
 
-        <!-- Schedule Timeline or Free Day Card -->
-        <div id="timeline-container" class="timeline-container">
-          <!-- Content dynamically rendered here -->
+        <!-- Quote Card (clickable to open popup) -->
+        <div id="quote-card" class="quote-card" role="button" tabindex="0" aria-label="Open daily quote">
+          <div class="quote-header">
+            <span class="quote-label">A QUOTE FOR THE DAY</span>
+            <span class="quote-action">Read <i class="ph ph-arrow-up-right"></i></span>
+          </div>
+          <p id="quote-preview" class="quote-preview">Loading quote for you...</p>
+        </div>
+      </header>
+
+      <!-- Main Central Card: The Day -->
+      <main class="main-content">
+        <section class="day-hero-card" id="hero-day-card">
+          <!-- Day Full Date aligned to the left -->
+          <div class="day-date-left" id="day-full-date">Monday, September 28</div>
+
+          <!-- English number | Ge'ez numeral next to it in SurGraphics font -->
+          <div class="day-numeral-wrapper">
+            <div id="day-numeral" class="day-numeral">
+              <span id="num-english">28</span>
+              <span class="numeral-divider">|</span>
+              <span id="num-geez">፳፰</span>
+            </div>
+          </div>
+        </section>
+
+        <!-- 5 Days of the Week Mini Cards Strip (Mon - Fri) -->
+        <section class="week-strip-section" aria-label="Week Days">
+          <div class="week-strip-header">
+            <span class="section-label">DAYS OF THE WEEK</span>
+            <span class="week-range" id="week-range-text">THIS WEEK</span>
+          </div>
+          <div class="week-strip" id="week-strip-container">
+            <!-- 5 day cards dynamically inserted here -->
+          </div>
+        </section>
+
+        <!-- Timeline Schedule Section -->
+        <section class="timeline-section" aria-label="Day Schedule">
+          <div class="timeline-header">
+            <div>
+              <h2 class="timeline-title" id="timeline-day-title">Today</h2>
+              <p class="timeline-subtitle" id="timeline-day-status">Checking schedule...</p>
+            </div>
+          </div>
+
+          <!-- Schedule Timeline or Free Day Card -->
+          <div id="timeline-container" class="timeline-container">
+            <!-- Content dynamically rendered here -->
+          </div>
+        </section>
+      </main>
+
+      <!-- Footer Note -->
+      <footer class="app-footer">
+        <span>Built with love for every single day</span>
+      </footer>
+    </div>
+
+    <!-- ====================================================================
+         VIEW 2: Course Detailed Page (with Back Button)
+         ==================================================================== -->
+    <div id="course-view" class="view-page hidden">
+      <!-- Course Top Navigation Bar -->
+      <header class="page-top-nav">
+        <button id="course-back-btn" class="back-btn" title="Back to schedule">
+          <i class="ph ph-arrow-left"></i> BACK
+        </button>
+        <span class="brand-tag" id="course-view-code">ARCH 2411</span>
+      </header>
+
+      <!-- Course Hero Card -->
+      <section class="course-hero-card">
+        <h1 class="course-hero-title" id="course-view-title">Basic Design I</h1>
+        <div class="course-hero-meta" id="course-view-meta">
+          <!-- Room, time, instructor -->
         </div>
       </section>
-    </main>
 
-    <!-- Footer Note -->
-    <footer class="app-footer">
-      <span>Built with love for every single day</span>
-    </footer>
+      <!-- Course Tasks & Homework with Quick Add -->
+      <section class="course-section">
+        <div class="section-header-row">
+          <span class="section-label"><i class="ph ph-notepad"></i> TASKS & SUBMISSIONS</span>
+          <span class="task-count-badge" id="course-task-count">0 Pending</span>
+        </div>
 
+        <!-- Inline Quick Add Task for this Course -->
+        <form id="course-add-task-form" class="add-task-form">
+          <input type="text" id="course-new-task-input" class="task-input" placeholder="Quick add task for this course..." required>
+          <button type="submit" class="task-add-btn" title="Add course task">
+            <i class="ph ph-plus"></i>
+          </button>
+        </form>
+
+        <!-- Course Tasks List -->
+        <div id="course-tasks-list" class="tasks-list">
+          <!-- Tasks dynamically rendered here -->
+        </div>
+      </section>
+
+      <!-- Personal Class Notes -->
+      <section class="course-section">
+        <div class="section-header-row">
+          <span class="section-label"><i class="ph ph-pencil-simple-line"></i> MY CLASS NOTES</span>
+          <span class="notes-saved-hint" id="course-notes-hint">Saved automatically</span>
+        </div>
+        <textarea id="course-notes-textarea" class="course-notes-textarea" placeholder="Jot down desk critique notes, materials mentioned by the professor, or reminders for next class..."></textarea>
+      </section>
+
+      <!-- Footer with Love Signature -->
+      <footer class="course-page-footer">
+        <div class="love-signature">I <i class="ph ph-heart heart-icon"></i> U</div>
+      </footer>
+    </div>
+
+  </div>
+
+  <!-- Minimal Floating Action Button (FAB) & Quick Menu -->
+  <div class="fab-wrapper" id="fab-wrapper">
+    <div id="fab-menu" class="fab-menu hidden">
+      <button id="fab-add-task" class="fab-menu-item">
+        <i class="ph ph-plus-circle"></i> <span>Add Task</span>
+      </button>
+      <button id="fab-view-tasks" class="fab-menu-item">
+        <i class="ph ph-check-square-offset"></i> <span>All Tasks</span>
+      </button>
+      <button id="fab-quote" class="fab-menu-item">
+        <i class="ph ph-heart"></i> <span>Daily Note</span>
+      </button>
+    </div>
+    <button id="main-fab" class="main-fab" aria-label="Quick Actions">
+      <i class="ph ph-plus" id="fab-icon"></i>
+    </button>
   </div>
 
   <!-- Quote Modal Popup -->
@@ -137,7 +221,7 @@
     </div>
   </div>
 
-  <!-- Tasks & Deadlines Modal -->
+  <!-- All Tasks & Deadlines Modal -->
   <div id="tasks-modal" class="modal-backdrop hidden" role="dialog" aria-modal="true">
     <div class="modal-card wide-card">
       <div class="modal-header">
@@ -147,7 +231,6 @@
         </button>
       </div>
       <div class="modal-body scrollable-body">
-        <!-- Add personal task form -->
         <form id="add-task-form" class="add-task-form">
           <input type="text" id="new-task-input" class="task-input" placeholder="Add personal note or task..." required>
           <button type="submit" class="task-add-btn" title="Add task">
@@ -155,53 +238,8 @@
           </button>
         </form>
 
-        <!-- Tasks List -->
         <div id="tasks-list" class="tasks-list">
           <!-- Dynamic tasks rendered here -->
-        </div>
-      </div>
-      <div class="modal-footer">
-        <div class="love-signature">I <i class="ph ph-heart heart-icon"></i> U</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Class Details, Gear & Notes Modal -->
-  <div id="class-modal" class="modal-backdrop hidden" role="dialog" aria-modal="true">
-    <div class="modal-card wide-card">
-      <div class="modal-header">
-        <span class="modal-tag" id="class-modal-code">ARCH 2411</span>
-        <button id="class-modal-close-btn" class="modal-close-btn" aria-label="Close modal">
-          <i class="ph ph-x"></i>
-        </button>
-      </div>
-      <div class="modal-body scrollable-body">
-        <h3 id="class-modal-title" class="class-modal-title">Basic Design I</h3>
-        <div class="class-modal-meta" id="class-modal-meta">
-          <!-- Room, time, instructor -->
-        </div>
-
-        <!-- Course Assignments -->
-        <div class="modal-sub-section">
-          <span class="sub-section-title"><i class="ph ph-notepad"></i> COURSE TASKS</span>
-          <div id="class-modal-tasks" class="class-modal-tasks">
-            <!-- Tasks for this course -->
-          </div>
-        </div>
-
-        <!-- Studio Gear Checklist -->
-        <div class="modal-sub-section">
-          <span class="sub-section-title"><i class="ph ph-bag"></i> STUDIO GEAR CHECKLIST</span>
-          <div id="class-modal-gear" class="class-modal-gear">
-            <!-- Gear list with checkboxes -->
-          </div>
-        </div>
-
-        <!-- Personal Class Notes -->
-        <div class="modal-sub-section">
-          <span class="sub-section-title"><i class="ph ph-pencil-simple-line"></i> MY CLASS NOTES</span>
-          <textarea id="class-modal-notes" class="class-notes-input" placeholder="Jot down critique feedback, materials to bring, or professor notes..."></textarea>
-          <span class="notes-saved-hint" id="notes-saved-hint">Saved automatically</span>
         </div>
       </div>
       <div class="modal-footer">
