@@ -1,0 +1,113 @@
+{
+  "version": "1.0",
+  "last_updated": "2026-09-28",
+  "special_message": {
+    "active": true,
+    "title": "A Little Reminder",
+    "text": "Whatever this week brings, remember how proud I am of you. You are doing amazing!"
+  },
+  "quotes": [
+    {
+      "quote": "Whenever you feel overwhelmed today, take a slow breath and remember how remarkably capable you are. I see how hard you work, and I believe in you with all my heart.",
+      "author": "Always in Your Corner"
+    },
+    {
+      "quote": "You have this quiet strength and brilliant mind that always finds a way forward. Walk into today knowing someone is endlessly proud of you and cheering you on.",
+      "author": "Cheering for You"
+    },
+    {
+      "quote": "Don't worry about having every detail figured out at once. Just take it one step at a time today — you are doing so much better than you realize, and I love you endlessly.",
+      "author": "Gentle Reminder"
+    },
+    {
+      "quote": "Your passion and dedication inspire me every single day. Go show today what you are made of, my favorite person in the world.",
+      "author": "With All My Love"
+    },
+    {
+      "quote": "Breathe easy today. Remember that no class, no project, and no review defines your worth. You are extraordinary, and I will always be right here backing you up.",
+      "author": "Here for You"
+    },
+    {
+      "quote": "I know today has a lot in store, but there is nothing you cannot handle. You have the talent, the heart, and all my love behind you.",
+      "author": "Forever Believing in You"
+    },
+    {
+      "quote": "May today be kind to you, may your focus be clear, and may you feel how deeply loved and appreciated you are every single hour.",
+      "author": "Thinking of You Always"
+    }
+  ],
+  "assignments": [
+    {
+      "id": "asg-1",
+      "courseCode": "Arch 2411",
+      "courseTitle": "Basic Design I",
+      "title": "Concept Sketches & Preliminary Massing",
+      "dueDate": "2026-10-06",
+      "priority": "high",
+      "description": "Prepare 1:50 floor plan concept sketches and basic foam block massing."
+    },
+    {
+      "id": "asg-2",
+      "courseCode": "Arch 2311",
+      "courseTitle": "Communication Skills I",
+      "title": "Perspective Drafting & Shading Sheet",
+      "dueDate": "2026-10-08",
+      "priority": "medium",
+      "description": "Two-point perspective construction line drawing with tonal rendering."
+    },
+    {
+      "id": "asg-3",
+      "courseCode": "Arch 2511",
+      "courseTitle": "Building Materials & Construction I",
+      "title": "Masonry Bond Types Case Study",
+      "dueDate": "2026-10-09",
+      "priority": "low",
+      "description": "Brief sketch-note comparison between English bond and Flemish bond."
+    },
+    {
+      "id": "asg-4",
+      "courseCode": "Arch 2351",
+      "courseTitle": "Model Making Workshop",
+      "title": "Topography & Contour Layering",
+      "dueDate": "2026-10-12",
+      "priority": "medium",
+      "description": "Cut and assemble 3mm chipboard layers for the site terrain model."
+    }
+  ],
+  "studio_gear": {
+    "Arch 2351": [
+      "A3 cutting mat",
+      "X-Acto knife & extra #11 blades",
+      "Foam board / grey chipboard",
+      "UHU all-purpose adhesive",
+      "Stainless steel safety ruler"
+    ],
+    "Arch 2411": [
+      "Yellow trace paper roll",
+      "Clutch pencil (2B & 4B leads)",
+      "Fineliners (0.1, 0.3, 0.5)",
+      "Triangular scale ruler",
+      "Drafting tape / drafting dots"
+    ],
+    "Arch 2311": [
+      "Cartridge paper sheets",
+      "Set squares (45° and 30/60°)",
+      "Shading pencils & stump",
+      "Erasing shield & dust brush"
+    ],
+    "Arch 2511": [
+      "Field sketchbook",
+      "Retractable measuring tape",
+      "Course lecture notebook"
+    ],
+    "Arch 2541": [
+      "Scientific calculator",
+      "Engineering graph pad",
+      "Formulas reference sheet"
+    ],
+    "Arch 2211": [
+      "Lecture notebook",
+      "Sketching pen for architectural history diagrams"
+    ]
+  }
+}

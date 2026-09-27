@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>Daily Schedule</title>
+  
+  <!-- PWA Meta Tags -->
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#000000">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="DailySchedule">
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
+  <link rel="icon" type="image/png" href="icons/icon-192.png">
+
+  <!-- Inter & JetBrains Mono Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  
+  <!-- Phosphor Icons (Local & Offline Ready) -->
+  <link rel="stylesheet" href="phosphor/style.css">
+  
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app-container">
+    
+    <!-- Top Header & Quote for the Day -->
+    <header class="app-header">
+      <div class="top-meta">
+        <span class="brand-tag">SEMESTER I SCHEDULE</span>
+        <div class="header-actions">
+          <button id="tasks-btn" class="chip-btn" title="View all assignments and tasks">
+            <i class="ph ph-check-square-offset"></i> TASKS
+          </button>
+          <button id="today-btn" class="chip-btn" title="Jump to today">
+            <i class="ph ph-calendar-blank"></i> TODAY
+          </button>
+        </div>
+      </div>
+
+      <!-- Quote Card (clickable to open popup) -->
+      <div id="quote-card" class="quote-card" role="button" tabindex="0" aria-label="Open daily quote">
+        <div class="quote-header">
+          <span class="quote-label">A QUOTE FOR THE DAY</span>
+          <span class="quote-action">Read <i class="ph ph-arrow-up-right"></i></span>
+        </div>
+        <p id="quote-preview" class="quote-preview">Loading quote for you...</p>
+      </div>
+    </header>
+
+    <!-- Main Central Card: The Day -->
+    <main class="main-content">
+      <section class="day-hero-card" id="hero-day-card">
+        <!-- Day Full Date aligned to the left as requested -->
+        <div class="day-date-left" id="day-full-date">Monday, September 28</div>
+
+        <!-- Big English Day Numeral in SurGraphics font -->
+        <div class="day-numeral-wrapper">
+          <div id="day-numeral" class="day-numeral">28</div>
+        </div>
+      </section>
+
+      <!-- 5 Days of the Week Mini Cards Strip (Mon - Fri) -->
+      <section class="week-strip-section" aria-label="Week Days">
+        <div class="week-strip-header">
+          <span class="section-label">DAYS OF THE WEEK</span>
+          <span class="week-range" id="week-range-text">THIS WEEK</span>
+        </div>
+        <div class="week-strip" id="week-strip-container">
+          <!-- 5 day cards dynamically inserted here -->
+        </div>
+      </section>
+
+      <!-- Timeline Schedule Section -->
+      <section class="timeline-section" aria-label="Day Schedule">
+        <div class="timeline-header">
+          <div>
+            <h2 class="timeline-title" id="timeline-day-title">Today</h2>
+            <p class="timeline-subtitle" id="timeline-day-status">Checking schedule...</p>
+          </div>
+        </div>
+
+        <!-- Schedule Timeline or Free Day Card -->
+        <div id="timeline-container" class="timeline-container">
+          <!-- Content dynamically rendered here -->
+        </div>
+      </section>
+    </main>
+
+    <!-- Footer Note -->
+    <footer class="app-footer">
+      <span>Built with love for every single day</span>
+    </footer>
+
+  </div>
+
+  <!-- Quote Modal Popup -->
+  <div id="quote-modal" class="modal-backdrop hidden" role="dialog" aria-modal="true">
+    <div class="modal-card">
+      <div class="modal-header">
+        <span class="modal-tag">DAILY REMINDER</span>
+        <button id="modal-close-btn" class="modal-close-btn" aria-label="Close modal">
+          <i class="ph ph-x"></i>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="quote-icon"><i class="ph ph-quotes"></i></div>
+        <p id="modal-quote-text" class="modal-quote-text"></p>
+        <p id="modal-quote-author" class="modal-quote-author"></p>
+      </div>
+      <div class="modal-footer">
+        <div class="love-signature">I <i class="ph ph-heart heart-icon"></i> U</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Free Day Cheer Modal / Popup -->
+  <div id="cheer-modal" class="modal-backdrop hidden" role="dialog" aria-modal="true">
+    <div class="modal-card cheer-card">
+      <div class="modal-header">
+        <span class="modal-tag">A SWEET NOTE</span>
+        <button id="cheer-close-btn" class="modal-close-btn" aria-label="Close modal">
+          <i class="ph ph-x"></i>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="cheer-icon"><i class="ph ph-sparkle"></i></div>
+        <h3 id="cheer-title" class="cheer-title">Enjoy Your Day Off</h3>
+        <p id="cheer-text" class="cheer-text">No classes to rush to today. Take time to relax, recharge, and remember that you are deeply loved and appreciated.</p>
+      </div>
+      <div class="modal-footer">
+        <div class="love-signature">I <i class="ph ph-heart heart-icon"></i> U</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tasks & Deadlines Modal -->
+  <div id="tasks-modal" class="modal-backdrop hidden" role="dialog" aria-modal="true">
+    <div class="modal-card wide-card">
+      <div class="modal-header">
+        <span class="modal-tag">ASSIGNMENTS & TASKS</span>
+        <button id="tasks-close-btn" class="modal-close-btn" aria-label="Close modal">
+          <i class="ph ph-x"></i>
+        </button>
+      </div>
+      <div class="modal-body scrollable-body">
+        <!-- Add personal task form -->
+        <form id="add-task-form" class="add-task-form">
+          <input type="text" id="new-task-input" class="task-input" placeholder="Add personal note or task..." required>
+          <button type="submit" class="task-add-btn" title="Add task">
+            <i class="ph ph-plus"></i>
+          </button>
+        </form>
+
+        <!-- Tasks List -->
+        <div id="tasks-list" class="tasks-list">
+          <!-- Dynamic tasks rendered here -->
+        </div>
+      </div>
+      <div class="modal-footer">
+        <div class="love-signature">I <i class="ph ph-heart heart-icon"></i> U</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Class Details, Gear & Notes Modal -->
+  <div id="class-modal" class="modal-backdrop hidden" role="dialog" aria-modal="true">
+    <div class="modal-card wide-card">
+      <div class="modal-header">
+        <span class="modal-tag" id="class-modal-code">ARCH 2411</span>
+        <button id="class-modal-close-btn" class="modal-close-btn" aria-label="Close modal">
+          <i class="ph ph-x"></i>
+        </button>
+      </div>
+      <div class="modal-body scrollable-body">
+        <h3 id="class-modal-title" class="class-modal-title">Basic Design I</h3>
+        <div class="class-modal-meta" id="class-modal-meta">
+          <!-- Room, time, instructor -->
+        </div>
+
+        <!-- Course Assignments -->
+        <div class="modal-sub-section">
+          <span class="sub-section-title"><i class="ph ph-notepad"></i> COURSE TASKS</span>
+          <div id="class-modal-tasks" class="class-modal-tasks">
+            <!-- Tasks for this course -->
+          </div>
+        </div>
+
+        <!-- Studio Gear Checklist -->
+        <div class="modal-sub-section">
+          <span class="sub-section-title"><i class="ph ph-bag"></i> STUDIO GEAR CHECKLIST</span>
+          <div id="class-modal-gear" class="class-modal-gear">
+            <!-- Gear list with checkboxes -->
+          </div>
+        </div>
+
+        <!-- Personal Class Notes -->
+        <div class="modal-sub-section">
+          <span class="sub-section-title"><i class="ph ph-pencil-simple-line"></i> MY CLASS NOTES</span>
+          <textarea id="class-modal-notes" class="class-notes-input" placeholder="Jot down critique feedback, materials to bring, or professor notes..."></textarea>
+          <span class="notes-saved-hint" id="notes-saved-hint">Saved automatically</span>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <div class="love-signature">I <i class="ph ph-heart heart-icon"></i> U</div>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
