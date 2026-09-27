@@ -546,8 +546,9 @@ function renderTimeline() {
       item.classList.add('active-now');
     }
 
+    const courseSlug = cls.code.replace(/\s+/g, '-').toLowerCase();
     item.innerHTML = `
-      <div class="class-card ${isNow ? 'current' : ''}" role="button" tabindex="0">
+      <div class="class-card ${isNow ? 'current' : ''}" data-course="${courseSlug}" role="button" tabindex="0">
         <div class="class-top-row">
           <span class="class-time">
             <i class="ph ph-clock"></i> ${cls.timeStr}

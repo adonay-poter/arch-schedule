@@ -4,8 +4,8 @@
   "description": "2nd Year Architecture Semester I Schedule & Daily Hub",
   "start_url": "./index.html",
   "display": "standalone",
-  "background_color": "#000000",
-  "theme_color": "#000000",
+  "background_color": "#07070b",
+  "theme_color": "#07070b",
   "orientation": "portrait-primary",
   "icons": [
     {
