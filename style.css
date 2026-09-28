@@ -495,13 +495,15 @@ body {
   gap: clamp(6px, 2.2vw, 14px);
 }
 
-/* Individual Day Card: Always a perfect square Apple Calendar icon */
+/* Individual Day Card: Always a perfect square Apple Calendar icon with paper texture */
 .day-card {
   flex: 1;
   max-width: 70px;
   aspect-ratio: 1 / 1;
   min-width: 0;
-  background: #0d0f17;
+  background-color: #0d0f17;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 240 240' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='paperGrain'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.82' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.18 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23paperGrain)'/%3E%3C/svg%3E");
+  background-size: 140px 140px;
   border: 1px solid var(--border-glass);
   border-radius: 14px;
   padding: 0;
@@ -517,7 +519,7 @@ body {
 }
 
 .day-card:hover {
-  border-color: rgba(56, 189, 248, 0.5);
+  border-color: rgba(255, 255, 255, 0.25);
   transform: translateY(-2px);
   box-shadow: 0 6px 16px rgba(0, 0, 0, 0.5);
 }
@@ -526,9 +528,11 @@ body {
   transform: scale(0.95);
 }
 
-/* Mini Header Band: Baby Blue with 3-letter Weekday (e.g. MON, TUE) */
+/* Mini Header Band: Solid Matte Baby Blue with Paper Grain */
 .day-card-header {
-  background: rgba(56, 189, 248, 0.16);
+  background-color: #121a28;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 240 240' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='paperGrain'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.82' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.2 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23paperGrain)'/%3E%3C/svg%3E");
+  background-size: 140px 140px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
   font-family: var(--font-main);
   font-size: 0.65rem;
@@ -545,7 +549,9 @@ body {
 
 /* Mini Body: Clean Card Face filling the rest of the square */
 .day-card-body {
-  background: #0d0f17;
+  background-color: #0d0f17;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 240 240' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='paperGrain'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.82' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.16 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23paperGrain)'/%3E%3C/svg%3E");
+  background-size: 140px 140px;
   flex: 1;
   width: 100%;
   display: flex;
@@ -564,23 +570,28 @@ body {
   transition: var(--transition);
 }
 
-/* Active Day Card: Apple Calendar Two-Tone Highlight (Baby Blue Band + Crisp White Face) */
+/* Active Day Card: Natural card border, no neon halo, with paper texture */
 .day-card.active {
-  border-color: #38bdf8;
+  border-color: rgba(255, 255, 255, 0.35);
   box-shadow: 
-    0 0 0 1.5px #38bdf8,
-    0 6px 18px rgba(0, 0, 0, 0.6);
+    0 8px 22px rgba(0, 0, 0, 0.65),
+    0 2px 6px rgba(0, 0, 0, 0.35);
   transform: translateY(-2px);
 }
 
 .day-card.active .day-card-header {
-  background: linear-gradient(180deg, #62c7fb 0%, #38bdf8 55%, #0284c7 100%);
+  background-color: #0284c7;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 240 240' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='paperGrain'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.82' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.22 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23paperGrain)'/%3E%3C/svg%3E");
+  background-size: 140px 140px;
   color: #ffffff;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.25);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25);
 }
 
 .day-card.active .day-card-body {
-  background: #ffffff;
+  background-color: #f8fafc;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 240 240' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='paperGrain'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.82' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.07 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23paperGrain)'/%3E%3C/svg%3E");
+  background-size: 140px 140px;
 }
 
 .day-card.active .day-card-num {
@@ -588,7 +599,7 @@ body {
   font-weight: 800;
 }
 
-/* Today indicator dot */
+/* Today indicator dot: natural soft sky blue */
 .day-card.today:not(.active)::after {
   content: '';
   position: absolute;
@@ -598,7 +609,7 @@ body {
   width: 4px;
   height: 4px;
   border-radius: 50%;
-  background: #38bdf8;
+  background: #7dd3fc;
   box-shadow: none;
 }
 
@@ -690,7 +701,7 @@ body {
 .class-card {
   background: #0d0f17;
   border: 1px solid var(--border-glass);
-  border-left: 3.5px solid rgba(255, 255, 255, 0.18);
+  border-left: 3px solid rgba(56, 189, 248, 0.4);
   border-radius: var(--radius-md);
   padding: 14px 16px;
   display: flex;
@@ -703,88 +714,29 @@ body {
 }
 
 .class-card:hover {
-  border-color: rgba(255, 255, 255, 0.28);
+  border-color: rgba(255, 255, 255, 0.24);
+  border-left-color: var(--accent-blue);
   transform: translateY(-2px);
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.4);
 }
 
 .class-card.current {
-  border-color: #2563eb;
+  border-color: rgba(56, 189, 248, 0.35);
+  border-left-color: var(--accent-blue);
   background: rgba(18, 24, 38, 0.9);
   box-shadow: 0 4px 18px rgba(0, 0, 0, 0.45);
 }
 
-/* Course Specific Accent Borders & Tints */
-.class-card[data-course*="2411"] {
-  border-left-color: var(--color-design);
-}
-.class-card[data-course*="2411"] .meta-code {
-  color: var(--color-design);
-}
-.class-card[data-course*="2411"] .class-periods-tag {
-  border-color: rgba(59, 130, 246, 0.35);
+/* Unified Calm Architecture Card Styling (No Distracting Rainbow Tints) */
+.class-card .meta-code {
   color: var(--accent-blue-soft);
-  background: rgba(37, 99, 235, 0.08);
+  font-weight: 600;
 }
 
-.class-card[data-course*="2351"] {
-  border-left-color: var(--color-workshop);
-}
-.class-card[data-course*="2351"] .meta-code {
-  color: var(--color-workshop);
-}
-.class-card[data-course*="2351"] .class-periods-tag {
-  border-color: rgba(245, 158, 11, 0.35);
-  color: #fde68a;
-  background: rgba(245, 158, 11, 0.08);
-}
-
-.class-card[data-course*="2541"] {
-  border-left-color: var(--color-structures);
-}
-.class-card[data-course*="2541"] .meta-code {
-  color: var(--color-structures);
-}
-.class-card[data-course*="2541"] .class-periods-tag {
-  border-color: rgba(6, 182, 212, 0.35);
-  color: #a5f3fc;
-  background: rgba(6, 182, 212, 0.08);
-}
-
-.class-card[data-course*="2311"] {
-  border-left-color: var(--color-comm);
-}
-.class-card[data-course*="2311"] .meta-code {
-  color: var(--color-comm);
-}
-.class-card[data-course*="2311"] .class-periods-tag {
-  border-color: rgba(16, 185, 129, 0.35);
-  color: #a7f3d0;
-  background: rgba(16, 185, 129, 0.08);
-}
-
-.class-card[data-course*="2511"] {
-  border-left-color: var(--color-materials);
-}
-.class-card[data-course*="2511"] .meta-code {
-  color: var(--color-materials);
-}
-.class-card[data-course*="2511"] .class-periods-tag {
-  border-color: rgba(139, 92, 246, 0.35);
-  color: #ddd6fe;
-  background: rgba(139, 92, 246, 0.08);
-}
-
-.class-card[data-course*="2211"] {
-  border-left-color: var(--color-history);
-}
-.class-card[data-course*="2211"] .meta-code {
-  color: var(--color-history);
-}
-.class-card[data-course*="2211"] .class-periods-tag {
-  border-color: rgba(234, 179, 8, 0.35);
-  color: #fef08a;
-  background: rgba(234, 179, 8, 0.08);
+.class-card .class-periods-tag {
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #cbd5e1;
+  background: rgba(255, 255, 255, 0.05);
 }
 
 .class-top-row {
@@ -1550,25 +1502,32 @@ body {
 }
 
 .main-fab {
-  width: 50px;
-  height: 50px;
+  width: 58px;
+  height: 58px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #38bdf8 0%, #0284c7 100%);
+  background-color: #0284c7;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 240 240' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='paperGrain'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.82' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.22 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23paperGrain)'/%3E%3C/svg%3E");
+  background-size: 160px 160px;
   color: #ffffff;
-  border: none;
+  border: 1px solid rgba(255, 255, 255, 0.2);
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.35rem;
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.6);
-  transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1), background 0.18s ease;
+  font-size: 1.55rem;
+  box-shadow: 
+    0 8px 24px rgba(0, 0, 0, 0.65),
+    inset 0 1px 0 rgba(255, 255, 255, 0.28),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.25);
+  transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1), background 0.18s ease, box-shadow 0.2s ease;
 }
 
 .main-fab:hover {
-  background: linear-gradient(135deg, #60a5fa 0%, #0284c7 100%);
+  background-color: #0ea5e9;
   transform: scale(1.05);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.7);
+  box-shadow: 
+    0 10px 28px rgba(0, 0, 0, 0.7),
+    inset 0 1px 0 rgba(255, 255, 255, 0.35);
 }
 
 .main-fab:active {
@@ -1577,7 +1536,7 @@ body {
 
 .main-fab.open {
   transform: rotate(45deg);
-  background: #0284c7;
+  background-color: #0369a1;
 }
 
 .fab-menu {
