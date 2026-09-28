@@ -370,17 +370,14 @@ body {
   align-items: center;
   justify-content: center;
   min-height: 145px;
-  font-family: 'Agbalumo', var(--font-graphic);
 }
 
-/* English number (Agbalumo) | Ge'ez numeral (SurGraphics) */
+/* English number (SurGraphics) | Ge'ez numeral (Agbalumo) */
 .day-numeral {
   width: 100%;
-  font-family: 'Agbalumo', var(--font-graphic);
-  font-size: clamp(4.6rem, 19vw, 6.8rem);
+  font-size: clamp(4.8rem, 20vw, 7.2rem);
   line-height: 0.95;
   color: #ffffff;
-  font-weight: 400;
   letter-spacing: -0.01em;
   user-select: none;
   display: flex;
@@ -391,7 +388,8 @@ body {
 }
 
 #num-english {
-  font-family: 'Agbalumo', cursive, sans-serif;
+  font-family: 'SurGraphics', sans-serif;
+  font-weight: 800;
   flex: 1;
   text-align: right;
   padding-right: clamp(10px, 3vw, 20px);
@@ -411,7 +409,8 @@ body {
 }
 
 #num-geez {
-  font-family: var(--font-graphic);
+  font-family: 'Agbalumo', cursive, sans-serif;
+  font-weight: 400;
   flex: 1;
   text-align: left;
   padding-left: clamp(10px, 3vw, 20px);
