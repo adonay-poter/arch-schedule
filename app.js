@@ -626,9 +626,13 @@ function updateHeroDay() {
   const gMonth = monthNames[selectedDate.getMonth()];
   const gDayName = dayNames[dayOfWeek];
 
-  // Display English number and Ge'ez numeral side-by-side with "|" divider
-  numEnglish.textContent = gDay;
-  numGeez.textContent = toGeez(gDay);
+  // Display the day name in uppercase SurGraphics font
+  if (numEnglish) {
+    numEnglish.textContent = gDayName.toUpperCase();
+  }
+  if (numGeez) {
+    numGeez.textContent = '';
+  }
   dayFullDate.textContent = `${gDayName}, ${gMonth} ${gDay}`;
 
   const numeralWrapper = document.getElementById('day-numeral');
