@@ -148,184 +148,216 @@ function toGeez(num) {
 
 let appQuotes = [
   {
-    quote: "Good morning, my fiker. Walk into the studio today with your head held high. You have the brilliant mind of an architect and the gentlest heart, and I believe in you with everything I have.",
-    author: "Always Adonay"
-  },
-  {
-    quote: "Fiker, whenever studio feels overwhelming or the crits feel harsh, take a slow breath. Your worth and your talent are so much bigger than one review. I am standing right behind you, always.",
-    author: "Forever in Your Corner, Adonay"
-  },
-  {
-    quote: "Don't rush the process, fiker. Great architecture is built line by line, layer by layer, and cut by cut. You are growing into someone extraordinary, and I love you endlessly.",
-    author: "With All My Love, Adonay"
-  },
-  {
-    quote: "Remember to drink some water, unclench your jaw, and rest your hands, fiker. Seeing how passionately you pour yourself into your dreams inspires me every single day.",
-    author: "Thinking of You Always, Adonay"
-  },
-  {
-    quote: "To my dearest fiker: even when foam board, chipboard, and glue get messy and the hours stretch long into the night, your smile is still my whole universe. You've got this today!",
-    author: "Yours, Adonay"
-  },
-  {
-    quote: "Fiker, whenever self-doubt whispers in your ear, remember that I see your brilliance even when you temporarily lose sight of it. Keep designing, my love.",
-    author: "Believing in You Forever, Adonay"
-  },
-  {
-    quote: "Every master architect started exactly where you are sitting right now, fiker — with a blank sheet of trace paper and an idea. Trust your creative voice today.",
-    author: "Always Adonay"
-  },
-  {
-    quote: "Fiker, never forget why you fell in love with architecture. The world is waiting for the spaces, light, and beauty you are going to create. I am loving you every step of the way.",
-    author: "Always by Your Side, Adonay"
-  },
-  {
-    quote: "You have this quiet strength, fiker, that always finds a way forward no matter how complex the project gets. Go show them what you are made of!",
-    author: "Cheering for You Loudly, Adonay"
-  },
-  {
-    quote: "Fiker, you don't need to have every single floor plan and detail solved all at once. Just win this hour and this drawing. You are doing so much better than you realize.",
-    author: "Gentle Reminder from Adonay"
-  },
-  {
-    quote: "No matter how demanding this semester gets, fiker, my love for you is constant, steady, and unconditional. Come home proud of yourself today.",
-    author: "With All My Heart, Adonay"
-  },
-  {
-    quote: "My sweet fiker, take pride in how far you have come from your first line drawing. Every challenge you face in the studio is molding you into a visionary.",
-    author: "Endlessly Proud of You, Adonay"
-  },
-  {
-    quote: "Fiker, your sketches have soul and your models have care. Never lose that human touch that makes your work so special. I love you to the moon and back.",
-    author: "Your Adonay"
-  },
-  {
-    quote: "May your mind stay sharp, your hand stay steady, and your heart stay peaceful today, fiker. You are deeply loved every single second.",
-    author: "Forever Adonay"
+    quote: "Fiker Berchilegn eshi hiwote",
+    author: "Adonay"
   },
   {
     quote: "By wisdom a house is built, and through understanding it is established; through knowledge its rooms are filled with rare and beautiful treasures.",
     author: "Proverbs 24:3–4"
   },
   {
-    quote: "I can do all things through Christ who strengthens me.",
-    author: "Philippians 4:13"
-  },
-  {
-    quote: "Trust in the Lord with all your heart and lean not on your own understanding; in all your ways acknowledge Him, and He will make your paths straight.",
-    author: "Proverbs 3:5–6"
-  },
-  {
-    quote: "May the favor of the Lord our God rest on us; establish the work of our hands for us — yes, establish the work of our hands.",
-    author: "Psalm 90:17"
-  },
-  {
-    quote: "For I know the plans I have for you, declares the Lord, plans to prosper you and not to harm you, plans to give you hope and a future.",
-    author: "Jeremiah 29:11"
-  },
-  {
-    quote: "Be strong and courageous. Do not be afraid; do not be discouraged, for the Lord your God will be with you wherever you go.",
-    author: "Joshua 1:9"
-  },
-  {
-    quote: "Whatever you do, work at it with all your heart, as working for the Lord and not for human masters.",
-    author: "Colossians 3:23"
-  },
-  {
-    quote: "He gives strength to the weary and increases the power of the weak... those who hope in the Lord will renew their strength. They will soar on wings like eagles.",
-    author: "Isaiah 40:29, 31"
-  },
-  {
-    quote: "According to the grace of God given to me, like a skilled master builder I laid a foundation, and someone else is building on it. But each one should build with care.",
-    author: "1 Corinthians 3:10"
-  },
-  {
-    quote: "Therefore everyone who hears these words of mine and puts them into practice is like a wise builder who built their house on the rock.",
-    author: "Matthew 7:24"
-  },
-  {
-    quote: "Let us not become weary in doing good, for at the proper time we will reap a harvest if we do not give up.",
-    author: "Galatians 6:9"
-  },
-  {
-    quote: "For God gave us a spirit not of fear, but of power, love, and self-discipline.",
-    author: "2 Timothy 1:7"
-  },
-  {
-    quote: "Unless the Lord builds the house, the builders labor in vain. The Lord watches over your going out and your coming in from this time forth and forevermore.",
-    author: "Psalm 127:1 & 121:8"
-  },
-  {
-    quote: "Commit your work to the Lord, and your plans will be established.",
-    author: "Proverbs 16:3"
-  },
-  {
     quote: "There are 360 degrees, so why stick to one? Architecture is really about well-being. I think that people want to feel good in a space.",
     author: "Zaha Hadid"
   },
   {
-    quote: "A great building must begin with the unmeasurable, must go through measurable means when it is being designed, and in the end must be unmeasurable.",
-    author: "Louis Kahn"
-  },
-  {
-    quote: "The mother art is architecture. Without an architecture of our own, we have no soul of our own civilization.",
-    author: "Frank Lloyd Wright"
-  },
-  {
-    quote: "Study nature, love nature, stay close to nature. It will never fail you.",
-    author: "Frank Lloyd Wright"
+    quote: "I can do all things through Christ who strengthens me.",
+    author: "Philippians 4:13"
   },
   {
     quote: "Architecture starts when you carefully put two bricks together. There it begins.",
     author: "Ludwig Mies van der Rohe"
   },
   {
-    quote: "God is in the details.",
-    author: "Ludwig Mies van der Rohe"
+    quote: "You got this belaaaaaa",
+    author: "Adonay"
+  },
+  {
+    quote: "Trust in the Lord with all your heart and lean not on your own understanding; in all your ways acknowledge Him, and He will make your paths straight.",
+    author: "Proverbs 3:5–6"
+  },
+  {
+    quote: "A great building must begin with the unmeasurable, must go through measurable means when it is being designed, and in the end must be unmeasurable.",
+    author: "Louis Kahn"
+  },
+  {
+    quote: "May the favor of the Lord our God rest on us; establish the work of our hands for us — yes, establish the work of our hands.",
+    author: "Psalm 90:17"
+  },
+  {
+    quote: "Study nature, love nature, stay close to nature. It will never fail you.",
+    author: "Frank Lloyd Wright"
+  },
+  {
+    quote: "zarem getan beserash akberiew eshi love",
+    author: "Adonay"
+  },
+  {
+    quote: "For I know the plans I have for you, declares the Lord, plans to prosper you and not to harm you, plans to give you hope and a future.",
+    author: "Jeremiah 29:11"
   },
   {
     quote: "Architecture is art, but art very much contaminated by many other things: by society, by science, by physics, by the poetry of light.",
     author: "Renzo Piano"
   },
   {
+    quote: "Be strong and courageous. Do not be afraid; do not be discouraged, for the Lord your God will be with you wherever you go.",
+    author: "Joshua 1:9"
+  },
+  {
+    quote: "The mother art is architecture. Without an architecture of our own, we have no soul of our own civilization.",
+    author: "Frank Lloyd Wright"
+  },
+  {
+    quote: "Endet ende mewedesh ekooooo",
+    author: "Adonay"
+  },
+  {
+    quote: "Whatever you do, work at it with all your heart, as working for the Lord and not for human masters.",
+    author: "Colossians 3:23"
+  },
+  {
     quote: "I believe that architecture should be about creating places where people feel alive and connected to nature.",
     author: "Tadao Ando"
   },
   {
-    quote: "You cannot simply put something new into a place; you have to absorb what exists around you, on the land, and then use that knowledge with contemporary thinking.",
-    author: "Tadao Ando"
+    quote: "He gives strength to the weary and increases the power of the weak... those who hope in the Lord will renew their strength. They will soar on wings like eagles.",
+    author: "Isaiah 40:29, 31"
   },
   {
-    quote: "Architecture is the learned game, correct and magnificent, of forms assembled in the light.",
-    author: "Le Corbusier"
+    quote: "God is in the details.",
+    author: "Ludwig Mies van der Rohe"
+  },
+  {
+    quote: "Here's a random Kiss from me to you...Empwa",
+    author: "Adonay"
+  },
+  {
+    quote: "According to the grace of God given to me, like a skilled master builder I laid a foundation, and someone else is building on it. But each one should build with care.",
+    author: "1 Corinthians 3:10"
   },
   {
     quote: "To fly, you have to be willing to give up the ground. Architecture is about that leap of imagination into a new way of seeing.",
     author: "Maya Lin"
   },
   {
+    quote: "Therefore everyone who hears these words of mine and puts them into practice is like a wise builder who built their house on the rock.",
+    author: "Matthew 7:24"
+  },
+  {
+    quote: "The sun never knew how great it was until it hit the side of a building.",
+    author: "Louis Kahn"
+  },
+  {
+    quote: "Yene mist berchi berchi endaterechi",
+    author: "Adonay"
+  },
+  {
+    quote: "Let us not become weary in doing good, for at the proper time we will reap a harvest if we do not give up.",
+    author: "Galatians 6:9"
+  },
+  {
     quote: "Those who look for the laws of Nature as a support for their new works collaborate with the Creator.",
     author: "Antoni Gaudí"
+  },
+  {
+    quote: "For God gave us a spirit not of fear, but of power, love, and self-discipline.",
+    author: "2 Timothy 1:7"
+  },
+  {
+    quote: "Architecture is the learned game, correct and magnificent, of forms assembled in the light.",
+    author: "Le Corbusier"
+  },
+  {
+    quote: "We are blessed betam ena thank you jesus",
+    author: "Adonay"
+  },
+  {
+    quote: "Unless the Lord builds the house, the builders labor in vain. The Lord watches over your going out and your coming in from this time forth and forevermore.",
+    author: "Psalm 127:1 & 121:8"
   },
   {
     quote: "Limitation makes the creative mind inventive.",
     author: "Walter Gropius (Bauhaus)"
   },
   {
+    quote: "Commit your work to the Lord, and your plans will be established.",
+    author: "Proverbs 16:3"
+  },
+  {
     quote: "Design is nothing but a humble understanding of materials, light, and the human spirit.",
     author: "Balkrishna Doshi (Pritzker Laureate)"
+  },
+  {
+    quote: "I told you JC yechelal beye...look where you are now my strong wife",
+    author: "Adonay"
+  },
+  {
+    quote: "And He has filled him with the Spirit of God, with wisdom, with understanding, with knowledge and with all kinds of skills — to make artistic designs.",
+    author: "Exodus 35:31–32"
   },
   {
     quote: "As an architect you design for the present, with an awareness of the past, for a future which is essentially unknown.",
     author: "Norman Foster"
   },
   {
+    quote: "God is our refuge and strength, an ever-present help in trouble.",
+    author: "Psalm 46:1"
+  },
+  {
     quote: "Architecture is about trying to make the world a little more like our dreams.",
     author: "Bjarke Ingels (BIG)"
   },
   {
+    quote: "Yene Anbesa weded new maregesh....",
+    author: "Adonay"
+  },
+  {
+    quote: "So do not fear, for I am with you; do not be dismayed, for I am your God. I will strengthen you and help you; I will uphold you with my righteous right hand.",
+    author: "Isaiah 41:10"
+  },
+  {
+    quote: "Architecture should speak of its time and place, but yearn for timelessness.",
+    author: "Frank Gehry"
+  },
+  {
+    quote: "I praise you because I am fearfully and wonderfully made; your works are wonderful, I know that full well.",
+    author: "Psalm 139:14"
+  },
+  {
+    quote: "The details are not the details. They make the design.",
+    author: "Charles Eames"
+  },
+  {
+    quote: "If God is for us, who can be against us?",
+    author: "Romans 8:31"
+  },
+  {
+    quote: "It is not because you are poor that you should not try to create quality. Everyone deserves quality, everyone deserves luxury, and everyone deserves comfort.",
+    author: "Francis Kéré (Pritzker Laureate)"
+  },
+  {
+    quote: "When you lie down, you will not be afraid; when you lie down, your sleep will be sweet.",
+    author: "Proverbs 3:24"
+  },
+  {
+    quote: "Always design a thing by considering it in its next larger context — a chair in a room, a room in a house, a house in an environment, an environment in a city plan.",
+    author: "Eero Saarinen"
+  },
+  {
+    quote: "I lift up my eyes to the mountains — where does my help come from? My help comes from the Lord, the Maker of heaven and earth.",
+    author: "Psalm 121:1–2"
+  },
+  {
     quote: "Linear time is a Western invention; time is not linear, it is a marvelous entanglement where at any moment points can be chosen and invented without beginning or end.",
     author: "Lina Bo Bardi"
+  },
+  {
+    quote: "My grace is sufficient for you, for my power is made perfect in weakness.",
+    author: "2 Corinthians 12:9"
+  },
+  {
+    quote: "Life is architecture and architecture is the mirror of life.",
+    author: "I. M. Pei"
   }
 ];
 
@@ -333,24 +365,24 @@ let appAssignments = [];
 
 let appCheerMessages = [
   {
-    title: "Mid-Week Recharge, Fiker",
-    text: "Today is completely free from classes. Put down the cutter and the scale ruler, fiker. Make a warm cup of coffee, relax your hands, and breathe. You worked so hard this week, and you truly deserve this rest."
+    title: "Mid-Week Recharge",
+    text: "Fiker Berchilegn eshi hiwote! Today is completely free from classes. Take a slow morning, enjoy your coffee, and rest up. You have been working so hard, and you truly deserve this day off."
   },
   {
-    title: "Time Just for My Architect",
-    text: "No studio reviews, no rushing across campus today. Just quiet time for my favorite person in the world. I am thinking of you all day, fiker, and sending you the warmest hugs."
+    title: "Yene Anbesa",
+    text: "Yene Anbesa weded new maregesh.... No schedules to rush to, no classrooms to walk to today. Take this time to do whatever makes you happiest. Empwa!"
   },
   {
-    title: "Rest Is Part of the Design",
-    text: "Even the greatest buildings need spaces between them to breathe, fiker. Rest is not wasted time — it's where your creativity recharges. I love you and I am endlessly proud of you."
+    title: "We Are Blessed",
+    text: "We are blessed betam ena thank you jesus. Rest is just as important as hard work, yene mist. Relax your mind, take good care of yourself today, and know that you are deeply loved."
   },
   {
-    title: "A Gentle Whisper for Fiker",
-    text: "You are doing so wonderfully, my fiker. Don't worry about next week's juries or deadlines today. Let your mind wander freely and remember how deeply and fiercely you are loved."
+    title: "Look Where You Are Now",
+    text: "I told you JC yechelal beye... look where you are now my strong wife. You got this belaaaaaa! Enjoy your studio break today."
   },
   {
-    title: "Peace in the Midst of the Semester",
-    text: "Take today slow, fiker. The semester moves fast, but today belongs to you. May your heart feel peaceful knowing that you always have a home in my love."
+    title: "A Sweet Reminder",
+    text: "Endet ende mewedesh ekooooo! Here's a random Kiss from me to you...Empwa! Berchi berchi endaterechi."
   }
 ];
 
