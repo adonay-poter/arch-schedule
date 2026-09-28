@@ -1,4 +1,4 @@
-const CACHE_NAME = 'arch-schedule-v26';
+const CACHE_NAME = 'arch-schedule-v27';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
@@ -6,6 +6,7 @@ const ASSETS_TO_CACHE = [
   './app.js',
   './manifest.json',
   './content.json',
+  './paper-grain.png',
   './Sur_Graphics_Extra_Bold_15c4e92309.ttf',
   './Agbalumo_Regular_c34065f469.ttf',
   './phosphor/style.css',
