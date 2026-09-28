@@ -1127,24 +1127,52 @@ function updateFABContext() {
 }
 
 function initFAB() {
+  const fabBackdrop = document.getElementById('fab-backdrop');
+
+  function openFAB() {
+    mainFab.classList.add('open');
+    fabMenu.classList.remove('hidden');
+    if (fabBackdrop) {
+      fabBackdrop.classList.add('active');
+    }
+  }
+
+  function closeFAB() {
+    mainFab.classList.remove('open');
+    fabMenu.classList.add('hidden');
+    if (fabBackdrop) {
+      fabBackdrop.classList.remove('active');
+    }
+  }
+
   mainFab.onclick = (e) => {
     e.stopPropagation();
-    const isOpen = mainFab.classList.toggle('open');
-    fabMenu.classList.toggle('hidden', !isOpen);
+    if (mainFab.classList.contains('open')) {
+      closeFAB();
+    } else {
+      openFAB();
+    }
   };
+
+  // Clicking on the blurred background closes the FAB without performing any underlying action
+  if (fabBackdrop) {
+    fabBackdrop.onclick = (e) => {
+      e.stopPropagation();
+      e.preventDefault();
+      closeFAB();
+    };
+  }
 
   // Close FAB menu on outside tap
   document.addEventListener('click', (e) => {
-    if (!e.target.closest('#fab-wrapper')) {
-      mainFab.classList.remove('open');
-      fabMenu.classList.add('hidden');
+    if (!e.target.closest('#fab-wrapper') && mainFab.classList.contains('open')) {
+      closeFAB();
     }
   });
 
   // FAB Option 1: Add Task (Opens slider in task mode)
   fabAddTask.onclick = () => {
-    mainFab.classList.remove('open');
-    fabMenu.classList.add('hidden');
+    closeFAB();
     const targetCode = currentCourse ? currentCourse.code : null;
     openSliderModal('task', targetCode);
   };
@@ -1152,8 +1180,7 @@ function initFAB() {
   // FAB Option 2: Add Class Note (Opens slider in note mode)
   if (fabAddNote) {
     fabAddNote.onclick = () => {
-      mainFab.classList.remove('open');
-      fabMenu.classList.add('hidden');
+      closeFAB();
       const targetCode = currentCourse ? currentCourse.code : null;
       openSliderModal('note', targetCode);
     };
@@ -1161,16 +1188,14 @@ function initFAB() {
 
   // FAB Option 3: View All Tasks
   fabViewTasks.onclick = () => {
-    mainFab.classList.remove('open');
-    fabMenu.classList.add('hidden');
+    closeFAB();
     renderTasksList();
     tasksModal.classList.remove('hidden');
   };
 
   // FAB Option 4: Daily Romantic Note
   fabQuote.onclick = () => {
-    mainFab.classList.remove('open');
-    fabMenu.classList.add('hidden');
+    closeFAB();
     const dayIndex = selectedDate.getDate() % appQuotes.length;
     const currentQuote = appQuotes[dayIndex];
     modalQuoteText.textContent = `"${currentQuote.quote}"`;

@@ -1518,9 +1518,25 @@ body {
   justify-content: center;
 }
 
-/* ==========================================================================
-   Minimal Floating Action Button (FAB) & Quick Menu
-   ========================================================================== */
+/* Fullscreen blurred backdrop when FAB menu is open */
+.fab-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+  background: rgba(6, 7, 10, 0.65);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 0.22s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.22s ease;
+}
+
+.fab-backdrop.active {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
 
 .fab-wrapper {
   position: fixed;
