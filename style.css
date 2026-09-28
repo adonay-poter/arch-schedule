@@ -365,8 +365,8 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: 130px;
-  padding: 10px 14px;
+  min-height: 145px;
+  padding: 4px 6px;
 }
 
 /* Day Name displayed in SurGraphics font style */
@@ -383,14 +383,15 @@ body {
 #num-english {
   font-family: 'SurGraphics', sans-serif;
   font-weight: 800;
-  font-size: clamp(2.2rem, 9.2vw, 3.8rem);
-  line-height: 1;
-  letter-spacing: 0.05em;
+  font-size: clamp(3.8rem, 18.5vw, 6.2rem);
+  line-height: 0.92;
+  letter-spacing: 0.02em;
   color: #ffffff;
   text-align: center;
   text-transform: uppercase;
   white-space: nowrap;
   width: 100%;
+  display: block;
 }
 
 /* Calendar Card Sub-Footer */

@@ -626,9 +626,21 @@ function updateHeroDay() {
   const gMonth = monthNames[selectedDate.getMonth()];
   const gDayName = dayNames[dayOfWeek];
 
-  // Display the day name in uppercase SurGraphics font
+  // Display the day name in large uppercase SurGraphics font
+  const DAY_FONT_SIZES = {
+    'MONDAY': 'clamp(3.8rem, 18.5vw, 6.2rem)',
+    'TUESDAY': 'clamp(3.4rem, 16.5vw, 5.6rem)',
+    'WEDNESDAY': 'clamp(2.7rem, 13vw, 4.5rem)',
+    'THURSDAY': 'clamp(3.1rem, 14.8vw, 5.0rem)',
+    'FRIDAY': 'clamp(4.0rem, 19.5vw, 6.6rem)',
+    'SATURDAY': 'clamp(3.0rem, 14.5vw, 5.0rem)',
+    'SUNDAY': 'clamp(4.0rem, 19.5vw, 6.6rem)'
+  };
+
+  const upperDay = gDayName.toUpperCase();
   if (numEnglish) {
-    numEnglish.textContent = gDayName.toUpperCase();
+    numEnglish.textContent = upperDay;
+    numEnglish.style.fontSize = DAY_FONT_SIZES[upperDay] || 'clamp(3.6rem, 17vw, 6.0rem)';
   }
   if (numGeez) {
     numGeez.textContent = '';
