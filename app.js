@@ -413,7 +413,7 @@ function updateHeroDay() {
   // Display English number and Ge'ez numeral side-by-side with "|" divider
   numEnglish.textContent = gDay;
   numGeez.textContent = toGeez(gDay);
-  dayFullDate.textContent = gDayName.slice(0, 3).toUpperCase();
+  dayFullDate.textContent = `${gDayName}, ${gMonth} ${gDay}`;
 
   const numeralWrapper = document.getElementById('day-numeral');
   numeralWrapper.style.transform = 'scale(0.94)';
@@ -458,8 +458,10 @@ function renderWeekStrip() {
     }
 
     card.innerHTML = `
-      <div class="day-card-num">${dayDate.getDate()}</div>
-      <div class="day-card-name">${dayLetters[i]}</div>
+      <div class="day-card-header">${dayLetters[i]}</div>
+      <div class="day-card-body">
+        <span class="day-card-num">${dayDate.getDate()}</span>
+      </div>
     `;
 
     card.onclick = () => {

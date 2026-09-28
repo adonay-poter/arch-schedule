@@ -11,6 +11,14 @@
   font-display: swap;
 }
 
+@font-face {
+  font-family: 'Agbalumo';
+  src: url('Agbalumo_Regular_c34065f469.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
 :root {
   --bg-color: #06070a;
   
@@ -216,54 +224,138 @@ body {
    ========================================================================== */
 
 /* ==========================================================================
-   Central Hero Card: Apple Calendar Icon Style (Squircle, Baby Blue Header)
+   Central Hero Card: Authentic Physical Calendar Card
    ========================================================================== */
 
 .calendar-card {
-  width: 100%;
-  max-width: 320px;
-  margin: 10px auto 0;
-  background: #ffffff;
-  border-radius: 34px;
+  background: #0b0d14;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 14px;
   padding: 0;
   display: flex;
   flex-direction: column;
   position: relative;
-  overflow: hidden;
+  overflow: visible;
+  margin-top: 8px;
+  /* Authentic stacked paper effect: 365-day tear-off calendar pad */
   box-shadow: 
-    0 16px 42px rgba(0, 0, 0, 0.65),
-    0 2px 8px rgba(0, 0, 0, 0.35);
-  border: 1px solid rgba(255, 255, 255, 0.18);
-  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s ease;
+    0 1px 0 rgba(255, 255, 255, 0.08),
+    0 4px 0 #08090f,
+    0 5px 0 rgba(255, 255, 255, 0.05),
+    0 8px 0 #05060a,
+    0 18px 32px rgba(0, 0, 0, 0.75);
+  transition: var(--transition);
 }
 
-/* Calendar Top Header Band: Baby Blue with Weekday */
-.calendar-header-band {
-  background: linear-gradient(180deg, #62c7fb 0%, #38bdf8 55%, #0ea5e9 100%);
-  padding: 14px 16px 12px;
+/* Calendar Binder Loops (Top Mounting Rings) */
+.calendar-binder {
+  position: absolute;
+  top: -9px;
+  left: 0;
+  right: 0;
   display: flex;
-  justify-content: center;
+  justify-content: space-around;
+  padding: 0 44px;
+  pointer-events: none;
+  z-index: 6;
+}
+
+.binder-loop {
+  display: flex;
+  flex-direction: column;
   align-items: center;
-  border-bottom: 1.5px solid rgba(0, 0, 0, 0.08);
+  position: relative;
+}
+
+.binder-bracket {
+  width: 14px;
+  height: 18px;
+  background: linear-gradient(180deg, #475569 0%, #1e293b 50%, #0f172a 100%);
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  border-radius: 7px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.65);
+}
+
+.binder-hole {
+  width: 8px;
+  height: 8px;
+  background: #06070a;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 50%;
+  position: absolute;
+  bottom: -3px;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.9);
+}
+
+/* Calendar Top Header Band: Baby Blue */
+.calendar-header-band {
+  background: linear-gradient(180deg, #38bdf8 0%, #0284c7 100%);
+  border-top-left-radius: 13px;
+  border-top-right-radius: 13px;
+  padding: 12px 18px 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.25);
 }
 
 .calendar-date-text {
-  font-family: var(--font-main);
-  font-size: 1.35rem;
-  letter-spacing: 0.14em;
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  letter-spacing: 0.08em;
   color: #ffffff;
   text-transform: uppercase;
-  font-weight: 800;
-  text-align: center;
-  line-height: 1;
+  font-weight: 700;
+}
+
+.calendar-card-tag {
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.1em;
+  color: #bae6fd;
+  background: rgba(0, 0, 0, 0.35);
+  padding: 2px 7px;
+  border-radius: 4px;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+/* Perforated Paper Tear Line with Side Notches */
+.calendar-perforation {
+  width: 100%;
+  height: 0;
+  border-top: 2px dashed rgba(255, 255, 255, 0.12);
+  position: relative;
+  background: transparent;
+}
+
+.calendar-perforation::before,
+.calendar-perforation::after {
+  content: '';
+  position: absolute;
+  top: -5px;
+  width: 10px;
+  height: 10px;
+  background: var(--bg-color);
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  z-index: 2;
+}
+
+.calendar-perforation::before {
+  left: -5px;
+}
+
+.calendar-perforation::after {
+  right: -5px;
 }
 
 /* Calendar Face Body (Centerpiece Numerals) */
 .calendar-body {
   width: 100%;
   box-sizing: border-box;
-  padding: 18px 8px 20px;
-  background: #ffffff;
+  padding: 16px 8px 16px;
+  background: #0a0c12;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -277,18 +369,19 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: 140px;
+  min-height: 145px;
+  font-family: 'Agbalumo', var(--font-graphic);
 }
 
-/* English number | Ge'ez numeral in SurGraphics font */
+/* English number (Agbalumo) | Ge'ez numeral (SurGraphics) */
 .day-numeral {
   width: 100%;
-  font-family: var(--font-graphic);
-  font-size: clamp(5rem, 21vw, 7.2rem);
+  font-family: 'Agbalumo', var(--font-graphic);
+  font-size: clamp(4.6rem, 19vw, 6.8rem);
   line-height: 0.95;
-  color: #16181f; /* Charcoal black numeral like Apple Calendar */
-  font-weight: 800;
-  letter-spacing: -0.02em;
+  color: #ffffff;
+  font-weight: 400;
+  letter-spacing: -0.01em;
   user-select: none;
   display: flex;
   align-items: center;
@@ -298,31 +391,55 @@ body {
 }
 
 #num-english {
+  font-family: 'Agbalumo', cursive, sans-serif;
   flex: 1;
   text-align: right;
   padding-right: clamp(10px, 3vw, 20px);
   line-height: 0.95;
-  color: #16181f;
+  color: #ffffff;
 }
 
 .numeral-divider {
   font-family: var(--font-main);
-  color: #38bdf8; /* Baby blue divider */
+  color: var(--accent-blue);
   font-size: 0.62em;
   font-weight: 300;
-  opacity: 0.9;
+  opacity: 0.85;
   flex-shrink: 0;
   line-height: 1;
   user-select: none;
 }
 
 #num-geez {
+  font-family: var(--font-graphic);
   flex: 1;
   text-align: left;
   padding-left: clamp(10px, 3vw, 20px);
   line-height: 0.95;
   white-space: nowrap;
-  color: #16181f;
+  color: #ffffff;
+}
+
+/* Calendar Card Sub-Footer */
+.calendar-footer-strip {
+  padding: 9px 16px 10px;
+  background: #07090e;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  border-bottom-left-radius: 13px;
+  border-bottom-right-radius: 13px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: var(--font-mono);
+  font-size: 0.64rem;
+  color: #64748b;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.cal-footer-meta {
+  color: var(--accent-blue-soft);
+  font-weight: 600;
 }
 
 /* ==========================================================================
@@ -369,74 +486,104 @@ body {
   gap: 8px;
 }
 
-/* Individual Day Card */
+/* Individual Day Card: Apple Calendar Icon Style */
 .day-card {
   background: #0d0f17;
   border: 1px solid var(--border-glass);
-  border-radius: var(--radius-sm);
-  padding: 10px 4px 8px;
+  border-radius: 12px;
+  padding: 0;
+  overflow: hidden;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
+  align-items: stretch;
   cursor: pointer;
   transition: var(--transition);
   position: relative;
   user-select: none;
-  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
 }
 
 .day-card:hover {
-  border-color: rgba(56, 189, 248, 0.45);
-  background: #131724;
+  border-color: rgba(56, 189, 248, 0.5);
   transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.45);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.5);
 }
 
 .day-card:active {
-  transform: scale(0.96);
+  transform: scale(0.95);
 }
 
-.day-card.active {
-  background: linear-gradient(135deg, #38bdf8 0%, #0284c7 100%);
-  border-color: #7dd3fc;
-  color: #ffffff;
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.45);
-  transform: translateY(-1px);
+/* Mini Header Band: Baby Blue with 3-letter Weekday (e.g. MON, TUE) */
+.day-card-header {
+  background: rgba(56, 189, 248, 0.16);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  font-family: var(--font-main);
+  font-size: 0.65rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  color: #7dd3fc;
+  text-transform: uppercase;
+  text-align: center;
+  padding: 4px 2px 3px;
+  line-height: 1;
+  transition: var(--transition);
+}
+
+/* Mini Body: Clean Card Face with Date Numeral */
+.day-card-body {
+  background: #0d0f17;
+  padding: 7px 2px 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: var(--transition);
 }
 
 .day-card-num {
   font-family: var(--font-main);
-  font-size: 1.25rem;
+  font-size: 1.22rem;
   font-weight: 700;
   line-height: 1.1;
-  color: inherit;
+  color: #f1f5f9;
+  transition: var(--transition);
 }
 
-.day-card-name {
-  font-family: var(--font-mono);
-  font-size: 0.65rem;
-  font-weight: 600;
-  letter-spacing: 0.06em;
-  color: var(--text-secondary);
-  margin-top: 4px;
-  text-transform: uppercase;
+/* Active Day Card: Apple Calendar Two-Tone Highlight (Baby Blue Band + Crisp White Face) */
+.day-card.active {
+  border-color: #38bdf8;
+  box-shadow: 
+    0 0 0 1.5px #38bdf8,
+    0 6px 18px rgba(0, 0, 0, 0.6);
+  transform: translateY(-2px);
 }
 
-.day-card.active .day-card-name {
+.day-card.active .day-card-header {
+  background: linear-gradient(180deg, #62c7fb 0%, #38bdf8 55%, #0284c7 100%);
   color: #ffffff;
-  font-weight: 700;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.12);
 }
 
+.day-card.active .day-card-body {
+  background: #ffffff;
+}
+
+.day-card.active .day-card-num {
+  color: #0f172a;
+  font-weight: 800;
+}
+
+/* Today indicator dot */
 .day-card.today:not(.active)::after {
   content: '';
   position: absolute;
-  bottom: 3px;
-  width: 5px;
-  height: 5px;
+  bottom: 2px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 4px;
+  height: 4px;
   border-radius: 50%;
   background: #38bdf8;
-  box-shadow: none; /* NO GLOW */
+  box-shadow: none;
 }
 
 /* ==========================================================================
