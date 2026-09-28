@@ -413,7 +413,7 @@ function updateHeroDay() {
   // Display English number and Ge'ez numeral side-by-side with "|" divider
   numEnglish.textContent = gDay;
   numGeez.textContent = toGeez(gDay);
-  dayFullDate.textContent = `${gDayName}, ${gMonth} ${gDay}`;
+  dayFullDate.textContent = gDayName.slice(0, 3).toUpperCase();
 
   const numeralWrapper = document.getElementById('day-numeral');
   numeralWrapper.style.transform = 'scale(0.94)';
