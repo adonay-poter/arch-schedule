@@ -179,7 +179,7 @@ let appQuotes = [
 
 let appAssignments = [];
 
-const CHEER_MESSAGES = [
+let appCheerMessages = [
   {
     title: "Mid-Week Recharge",
     text: "Today is completely free from classes. Take a slow morning, enjoy your coffee, and rest up. You have been working so hard, and you truly deserve this day off."
@@ -349,6 +349,9 @@ async function syncRemoteContent() {
     }
     if (data.assignments && Array.isArray(data.assignments)) {
       appAssignments = data.assignments;
+    }
+    if (data.cheer_messages && Array.isArray(data.cheer_messages) && data.cheer_messages.length > 0) {
+      appCheerMessages = data.cheer_messages;
     }
 
     setupDailyQuote();
@@ -521,7 +524,7 @@ function renderTimeline() {
     timelineContainer.appendChild(freeCard);
 
     document.getElementById('cheer-btn').onclick = () => {
-      const cheer = CHEER_MESSAGES[Math.floor(Math.random() * CHEER_MESSAGES.length)];
+      const cheer = appCheerMessages[Math.floor(Math.random() * appCheerMessages.length)];
       cheerTitle.textContent = cheer.title;
       cheerText.textContent = cheer.text;
       cheerModal.classList.remove('hidden');

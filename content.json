@@ -36,6 +36,20 @@
       "author": "Thinking of You Always"
     }
   ],
+  "cheer_messages": [
+    {
+      "title": "Mid-Week Recharge",
+      "text": "Today is completely free from classes. Take a slow morning, enjoy your coffee, and rest up. You have been working so hard, and you truly deserve this day off."
+    },
+    {
+      "title": "Time Just for You",
+      "text": "No schedules to rush to, no classrooms to walk to today. Take this time to do whatever makes you happiest. I am always thinking of you and sending you warm hugs."
+    },
+    {
+      "title": "A Sweet Reminder",
+      "text": "Rest is just as important as hard work. Relax your mind, take good care of yourself today, and know that you are deeply loved beyond words."
+    }
+  ],
   "assignments": [
     {
       "id": "asg-1",
