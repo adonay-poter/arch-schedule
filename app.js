@@ -18,8 +18,14 @@ const SCHEDULE_DATA = {
         title: 'Model Making Workshop',
         timeStr: '8:30 AM – 12:30 PM',
         periods: 'Periods 1–4',
+        contactDays: 'Mo 1,2,3,4',
         room: 'G block - Workshop',
         instructor: 'TBA',
+        crHrs: 3,
+        lecHrs: 1,
+        labHrs: 3,
+        contHrs: 4,
+        section: 'Sec 1',
         startHour: 8,
         startMin: 30,
         endHour: 12,
@@ -27,11 +33,17 @@ const SCHEDULE_DATA = {
       },
       {
         code: 'Arch 2541',
-        title: 'Theory & Design of Structures I',
+        title: 'Theory & design of structures I',
         timeStr: '1:30 PM – 5:30 PM',
         periods: 'Periods 5–8',
-        room: 'Room E06A',
+        contactDays: 'Mon 5,6,7,8',
+        room: 'E06A',
         instructor: 'Henok Mulat',
+        crHrs: 3,
+        lecHrs: 2,
+        labHrs: 2,
+        contHrs: 4,
+        section: 'Sec 1',
         startHour: 13,
         startMin: 30,
         endHour: 17,
@@ -45,11 +57,17 @@ const SCHEDULE_DATA = {
     classes: [
       {
         code: 'Arch 2411',
-        title: 'Basic Design I',
+        title: 'Basic design I',
         timeStr: '8:30 AM – 4:30 PM',
         periods: 'Periods 1–7',
-        room: 'Room E06A',
+        contactDays: 'Tu 1,2,3,4,5,6,7',
+        room: 'E06A',
         instructor: 'Keniko Duguma & Estifanos Habtamu',
+        crHrs: 3,
+        lecHrs: 1,
+        labHrs: 6,
+        contHrs: 7,
+        section: 'Sec 1',
         startHour: 8,
         startMin: 30,
         endHour: 16,
@@ -60,7 +78,7 @@ const SCHEDULE_DATA = {
   3: { // Wednesday
     name: 'Wednesday',
     short: 'WED',
-    classes: [] // Free Day!
+    classes: [] // Free Day / Open Studio!
   },
   4: { // Thursday
     name: 'Thursday',
@@ -68,11 +86,17 @@ const SCHEDULE_DATA = {
     classes: [
       {
         code: 'Arch 2311',
-        title: 'Communication Skills I',
+        title: 'Communication skills I',
         timeStr: '8:30 AM – 5:30 PM',
         periods: 'Periods 1–8',
+        contactDays: 'Th 1,2,3,4,5,6,7,8',
         room: 'G block - Workshop',
         instructor: 'Eyoab Equbay',
+        crHrs: 3,
+        lecHrs: 2,
+        labHrs: 6,
+        contHrs: 8,
+        section: 'Sec 1',
         startHour: 8,
         startMin: 30,
         endHour: 17,
@@ -86,11 +110,17 @@ const SCHEDULE_DATA = {
     classes: [
       {
         code: 'Arch 2511',
-        title: 'Building Materials & Construction I',
+        title: 'Building materials & construction I',
         timeStr: '8:30 AM – 12:30 PM',
         periods: 'Periods 1–4',
-        room: 'Room E06A',
+        contactDays: 'Fr 1,2,3,4',
+        room: 'E06A',
         instructor: 'Miraf Abuye',
+        crHrs: 3,
+        lecHrs: 2,
+        labHrs: 3,
+        contHrs: 5,
+        section: 'Sec 1',
         startHour: 8,
         startMin: 30,
         endHour: 12,
@@ -98,11 +128,17 @@ const SCHEDULE_DATA = {
       },
       {
         code: 'Arch 2211',
-        title: 'History of Architecture I',
+        title: 'History of architecture I',
         timeStr: '1:30 PM – 5:30 PM',
         periods: 'Periods 5–8',
-        room: 'Room E107',
+        contactDays: 'Fr 5,6,7,8',
+        room: 'E107',
         instructor: 'Sebona Hailu',
+        crHrs: 3,
+        lecHrs: 3,
+        labHrs: 0,
+        contHrs: 3,
+        section: 'Sec 1',
         startHour: 13,
         startMin: 30,
         endHour: 17,
@@ -805,7 +841,7 @@ function renderTimeline() {
         </div>
 
         <div class="class-details-row">
-          <span>Semester I</span>
+          <span>${cls.crHrs || 3} Cr. Hrs • ${cls.contHrs || 0} Cont. Hrs</span>
           <span style="color:var(--text-secondary);"><i class="ph ph-notepad"></i> Open Details ↗</span>
         </div>
       </div>
@@ -830,9 +866,11 @@ function openCoursePage(cls) {
   courseViewTitle.textContent = cls.title;
 
   courseViewMeta.innerHTML = `
-    <div><i class="ph ph-clock"></i> ${cls.timeStr} (${cls.periods})</div>
-    <div><i class="ph ph-map-pin"></i> ${cls.room}</div>
-    <div><i class="ph ph-user"></i> ${cls.instructor}</div>
+    <div><i class="ph ph-clock"></i> ${cls.timeStr} • ${cls.periods} (${cls.contactDays || ''})</div>
+    <div><i class="ph ph-map-pin"></i> Class Room: <strong>${cls.room}</strong></div>
+    <div><i class="ph ph-user"></i> Instructor: <strong>${cls.instructor}</strong></div>
+    <div><i class="ph ph-graduation-cap"></i> ${cls.crHrs || 3} Cr. Hrs • Lec: ${cls.lecHrs || 0}h | Lab: ${cls.labHrs || 0}h | Cont: ${cls.contHrs || 0}h</div>
+    <div><i class="ph ph-users-three"></i> 2nd Year 1st Sem • Sec 1 (2018 E.C Entry)</div>
   `;
 
   // Render course-specific tasks
