@@ -1,4 +1,4 @@
-const CACHE_NAME = 'arch-schedule-v25';
+const CACHE_NAME = 'arch-schedule-v26';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',

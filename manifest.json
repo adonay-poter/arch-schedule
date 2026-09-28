@@ -1,11 +1,11 @@
 {
-  "name": "Architecture Schedule",
-  "short_name": "ArchSchedule",
+  "name": "My Schedule",
+  "short_name": "My Schedule",
   "description": "2nd Year Architecture Semester I Schedule & Daily Hub",
   "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#07070b",
-  "theme_color": "#07070b",
+  "theme_color": "#0284c7",
   "orientation": "portrait-primary",
   "icons": [
     {
