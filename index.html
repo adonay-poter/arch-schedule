@@ -58,17 +58,44 @@
 
       <!-- Main Central Card: The Day -->
       <main class="main-content">
-        <section class="day-hero-card" id="hero-day-card">
-          <!-- Day Full Date aligned to the left -->
-          <div class="day-date-left" id="day-full-date">Monday, September 28</div>
-
-          <!-- English number | Ge'ez numeral next to it in SurGraphics font -->
-          <div class="day-numeral-wrapper">
-            <div id="day-numeral" class="day-numeral">
-              <span id="num-english">28</span>
-              <span class="numeral-divider">|</span>
-              <span id="num-geez">፳፰</span>
+        <!-- Main Central Card: The Calendar Card -->
+        <section class="day-hero-card calendar-card" id="hero-day-card">
+          <!-- Calendar Binder / Hanging Loops -->
+          <div class="calendar-binder" aria-hidden="true">
+            <div class="binder-loop loop-left">
+              <span class="binder-bracket"></span>
+              <span class="binder-hole"></span>
             </div>
+            <div class="binder-loop loop-right">
+              <span class="binder-bracket"></span>
+              <span class="binder-hole"></span>
+            </div>
+          </div>
+
+          <!-- Calendar Header Bar in Electric Blue -->
+          <div class="calendar-header-band">
+            <span class="calendar-date-text" id="day-full-date">Monday, September 28</span>
+            <span class="calendar-card-tag">DAILY</span>
+          </div>
+
+          <!-- Tear-off perforation -->
+          <div class="calendar-perforation" aria-hidden="true"></div>
+
+          <!-- Calendar Page Face: Numerals -->
+          <div class="calendar-body">
+            <div class="day-numeral-wrapper">
+              <div id="day-numeral" class="day-numeral">
+                <span id="num-english">28</span>
+                <span class="numeral-divider">|</span>
+                <span id="num-geez">፳፰</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Calendar Footer: Architecture & University details -->
+          <div class="calendar-footer-strip">
+            <span class="cal-footer-left">HOPE ENTERPRISE UNIVERSITY</span>
+            <span class="cal-footer-right">ARCH • SEMESTER I</span>
           </div>
         </section>
 
@@ -101,7 +128,7 @@
 
       <!-- Footer Note -->
       <footer class="app-footer">
-        <span>Built with love for every single day</span>
+        <span>Built with love <i class="ph-fill ph-heart heart-pulse" aria-hidden="true"></i> for every single day</span>
       </footer>
     </div>
 
